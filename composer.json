@@ -1,0 +1,26 @@
+{
+    "name": "nullref/yii2-datatables",
+    "description": "Yii2 Widget for DataTables jQuery plug-in",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Serhiy Vinichuk",
+            "email": "serhiyvinichuk@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "2.0.*",
+        "bower-asset/datatables": "1.10.4"
+    },
+    "autoload": {
+        "psr-4": {"nullref\\widgets\\datatable\\": "src/"}
+    },
+    "extra": {
+        "asset-installer-paths": {
+            "npm-asset-library": "vendor/npm",
+            "bower-asset-library": "vendor/bower"
+        }
+    }
+}
