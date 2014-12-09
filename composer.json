@@ -11,11 +11,11 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
-        "yiisoft/yii2": "2.0.*",
+        "yiisoft/yii2": ">=2.0.0",
         "bower-asset/datatables": "1.10.4"
     },
     "autoload": {
-        "psr-4": {"nullref\\widgets\\datatable\\": "src/"}
+        "psr-4": {"nullref\\datatable\\": "src/"}
     },
     "extra": {
         "asset-installer-paths": {

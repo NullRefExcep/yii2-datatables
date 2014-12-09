@@ -2,3 +2,32 @@ yii2-datatables
 ===============
 
 Yii2 Widget for DataTables plug-in for jQuery
+
+## Server-side processing
+
+To enable server-side processing add `DataTableAction` to controller like this:
+
+```php
+ class SomeController extends Controller
+ {
+     public function actions()
+     {
+         return [
+             'datatables' => [
+                 'class' => 'nullref\widgets\datatable\DataTableAction',
+                 'modelClass' => 'app\models\Model',
+             ],
+         ];
+     }
+     
+}
+```
+
+In DataTable options specify: 
+```js
+{
+    "serverSide": true,
+    "ajax": "datatables"
+}
+```
+
