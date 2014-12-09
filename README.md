@@ -1,7 +1,7 @@
 yii2-datatables
 ===============
 
-Yii2 Widget for DataTables plug-in for jQuery
+Yii2 Widget for [DataTables](https://github.com/DataTables/DataTables) plug-in for jQuery
 
 ## Server-side processing
 
@@ -31,3 +31,4 @@ In DataTable options specify:
 }
 ```
 
+Yii2 Widget for [DataTables](https://github.com/DataTables/DataTables) plug-in for jQuery
