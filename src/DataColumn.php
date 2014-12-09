@@ -5,7 +5,7 @@
  * @author Serhiy Vinichuk <serhiyvinichuk@gmail.com>
  */
 
-namespace nullref\widgets\datatable;
+namespace nullref\datatable;
 
 use yii\helpers\Inflector;
 
