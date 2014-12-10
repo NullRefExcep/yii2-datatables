@@ -1,6 +1,9 @@
 {
     "name": "nullref/yii2-datatables",
-    "description": "Yii2 Widget for DataTables jQuery plug-in",
+    "description": "Yii2 Extension for DataTables jQuery plug-in",
+    "type": "yii2-extension",
+    "homepage": "https://github.com/NullRefExcep/yii2-datatables",
+    "keywords": ["yii2, yii, widget, jquery, datatable", "datatables","plugin"],
     "license": "MIT",
     "authors": [
         {
@@ -12,7 +15,7 @@
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": ">=2.0.0",
-        "bower-asset/datatables": "1.10.4"
+        "bower-asset/datatables": ">=1.10.4"
     },
     "autoload": {
         "psr-4": {"nullref\\datatable\\": "src/"}
