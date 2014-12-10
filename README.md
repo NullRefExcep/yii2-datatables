@@ -3,6 +3,21 @@ Yii2 DataTables
 
 Yii2 Widget for [DataTables](https://github.com/DataTables/DataTables) plug-in for jQuery
 
+## Installation
+
+The preferred way to install this extension is through composer.
+
+Either run
+
+```
+composer require "nullref/yii2-datatables" "*"
+```
+or add
+```
+"nullref/yii2-datatables": "*"
+```
+to the require section of your `composer.json` file.
+
 ## Server-side processing
 
 To enable server-side processing add `DataTableAction` to controller like this:
