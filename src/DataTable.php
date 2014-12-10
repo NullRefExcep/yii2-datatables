@@ -245,6 +245,7 @@ class DataTable extends Widget
     {
         parent::init();
         DataTableAsset::register($this->view);
+        $this->initColumns();
     }
 
     public function run()
@@ -375,6 +376,19 @@ class DataTable extends Widget
     protected function guessLanguage()
     {
         $this->language = new DataLanguage();
+    }
+
+    protected function initColumns()
+    {
+        if (isset($this->columns)) {
+            foreach ($this->columns as $key => $value) {
+                if (isset($value['class'])) {
+                    $column = \Yii::createObject($value);
+                    $this->columns[$key] = $column;
+                }
+            }
+
+        }
     }
 
 } 

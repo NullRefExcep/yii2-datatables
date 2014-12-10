@@ -6,7 +6,7 @@
  * Time: 10:12
  */
 
-namespace nullref\widgets\datatable;
+namespace nullref\datatable;
 
 
 use yii\web\AssetBundle;
