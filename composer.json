@@ -3,7 +3,7 @@
     "description": "Yii2 Extension for DataTables jQuery plug-in",
     "type": "yii2-extension",
     "homepage": "https://github.com/NullRefExcep/yii2-datatables",
-    "keywords": ["yii2, yii, widget, jquery, datatable", "datatables","plugin"],
+    "keywords": ["yii2", "yii", "widget", "jquery", "datatable", "datatables","plugin"],
     "license": "MIT",
     "authors": [
         {
