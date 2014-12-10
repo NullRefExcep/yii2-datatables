@@ -270,6 +270,7 @@ class DataTable extends Widget
         return array_merge($this->getFeatures(), $this->getOptions(), $this->getCallbacks(), [
             'columns' => $this->columns,
             'data' => $this->data,
+            'ajax' => $this->ajax,
             'language' => $this->language,
         ]);
     }
