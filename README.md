@@ -30,7 +30,7 @@ To enable server-side processing add `DataTableAction` to controller like this:
          return [
              'datatables' => [
                  'class' => 'nullref\datatable\DataTableAction',
-                 'query' => Model::find(),
+                 'searchModel' => new SearchModel(),
              ],
          ];
      }
