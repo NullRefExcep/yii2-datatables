@@ -52,13 +52,17 @@ class DataTableAction extends Action
         }
         $query->andWhere($this->query->where);
         $dataProvider = new ActiveDataProvider(['query' => $query]);
-        $response = [
-            'draw' => $draw,
-            'recordsTotal' => $this->query->count(),
-            'recordsFiltered' => $dataProvider->getTotalCount(),
-            'data' => $dataProvider->getModels(),
-        ];
         Yii::$app->response->format = Response::FORMAT_JSON;
+        try {
+            $response = [
+                'draw' => $draw,
+                'recordsTotal' => $this->query->count(),
+                'recordsFiltered' => $dataProvider->getTotalCount(),
+                'data' => $dataProvider->getModels(),
+            ];
+        } catch (\Exception $e) {
+            return ['error' => $e->getMessage()];
+        }
         return $response;
     }
 } 
