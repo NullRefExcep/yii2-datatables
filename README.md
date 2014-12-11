@@ -3,6 +3,8 @@ Yii2 DataTables
 
 Yii2 Widget for [DataTables](https://github.com/DataTables/DataTables) plug-in for jQuery
 
+**Work in Progress. Not ready for production**
+
 ## Installation
 
 The preferred way to install this extension is through composer.
@@ -70,3 +72,17 @@ Properties of `LinkColumn`:
 - `options` - HTML options of the `a` tag;
 - `queryParams` - array of params added to `url`
 
+## Styling 
+
+`DataTables` supports several styling solutions, including `Bootstrap`, `jQuery UI`, `Foundation`.
+
+```php
+'assetManager' => [
+    'bundles' => [
+        'datatables' => [
+            'class' => 'nullref\datatable\DataTableAsset',
+            'styling' => \nullref\datatable\DataTableAsset::STYLING_BOOTSTRAP,
+        ]
+    ],
+],
+```
