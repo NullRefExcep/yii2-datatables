@@ -8,7 +8,6 @@
 namespace nullref\datatable;
 
 
-use yii\base\InvalidConfigException;
 use yii\base\Widget;
 use yii\helpers\Html;
 use yii\helpers\Json;
@@ -20,55 +19,55 @@ class DataTable extends Widget
     /**
      * @var boolean Feature control DataTables' smart column width handling
      */
-    public $autoWidth = true;
+    public $autoWidth;
     /**
      * @var bool Feature control deferred rendering for additional speed of initialisation.
      */
-    public $deferRender = false;
+    public $deferRender;
     /**
      * @var bool Feature control table information display field
      */
-    public $info = true;
+    public $info;
     /**
      * @var bool Use markup and classes for the table to be themed by jQuery UI ThemeRoller.
      */
-    public $jQueryUI = false;
+    public $jQueryUI;
     /**
      * @var bool Feature control the end user's ability to change the paging display length of the table.
      */
-    public $lengthChange = true;
+    public $lengthChange;
     /**
      * @var bool Feature control ordering (sorting) abilities in DataTables.
      */
-    public $ordering = true;
+    public $ordering ;
     /**
      * @var bool Enable or disable table pagination.
      */
-    public $paging = true;
+    public $paging ;
     /**
      * @var bool Feature control the processing indicator.
      */
-    public $processing = false;
+    public $processing ;
     /**
      * @var bool Enable horizontal scrolling
      */
-    public $scrollX = false;
+    public $scrollX ;
     /**
      * @var bool Enable vertical scrolling
      */
-    public $scrollY = false;
+    public $scrollY ;
     /**
      * @var bool Feature control search (filtering) abilities
      */
-    public $searching = true;
+    public $searching ;
     /**
      * @var bool Enable server-side filtering, paging and sorting calculations
      */
-    public $serverSide = false;
+    public $serverSide ;
     /**
      * @var bool Restore table state on page reload
      */
-    public $stateSave = false;
+    public $stateSave ;
     /**
      * @var array Load data for the table's content from an Ajax source
      */
@@ -76,59 +75,59 @@ class DataTable extends Widget
     /**
      * @var array Data to use as the display data for the table.
      */
-    public $data = [];
+    public $data ;
     /**
      * @var array Set column definition initialisation properties.
      */
     public $columnDefs;
     /**
-     * @var DataColumn[] Set column specific initialisation properties.
+     * @var array Set column specific initialisation properties.
      */
-    public $columns = [];
+    public $columns ;
     /**
      * @var bool|int|array Delay the loading of server-side data until second draw
      */
-    public $deferLoading = false;
+    public $deferLoading ;
     /**
      * @var bool Destroy any existing table matching the selector and replace with the new options.
      */
-    public $destroy = false;
+    public $destroy ;
     /**
      * @var int Initial paging start point
      */
-    public $displayStart = 0;
+    public $displayStart;
     /**
      * @var string Define the table control elements to appear on the page and in what order
      */
-    public $dom = 'lfrtip';
+    public $dom;
     /**
      * @var array Change the options in the page length `select` list.
      */
-    public $lengthMenu = [10, 25, 50, 100];
+    public $lengthMenu;
     /**
      * @var bool Control which cell the order event handler will be applied to in a column
      */
-    public $orderCellsTop = false;
+    public $orderCellsTop ;
     /**
      * @var bool Highlight the columns being ordered in the table's body
      */
-    public $orderClasses = true;
+    public $orderClasses ;
     /**
      * @var array Initial order (sort) to apply to the table
      */
-    public $order = [[0, 'ASC']];
+    public $order ;
     /**
      * @var array Ordering to always be applied to the table
      */
-    public $orderFixed = [];
+    public $orderFixed;
     /**
      * @var bool Multiple column ordering ability control.
      */
-    public $orderMulti = true;
+    public $orderMulti ;
     /**
      * @var int Change the initial page length (number of rows per page)
      */
-    public $pageLength = 10;
+    public $pageLength ;
 
     const PAGING_SIMPLE = 'simple';
     const PAGING_SIMPLE_NUMBERS = 'simple_numbers';
@@ -138,7 +137,7 @@ class DataTable extends Widget
     /**
      * @var string Pagination button display options.
      */
-    public $pagingType = self::PAGING_SIMPLE_NUMBERS;
+    public $pagingType;
     /**
      * @var string|array Display component renderer types
      */
@@ -146,41 +145,37 @@ class DataTable extends Widget
     /**
      * @var bool Retrieve an existing DataTables instance
      */
-    public $retrieve = false;
+    public $retrieve ;
     /**
      * @var bool Allow the table to reduce in height when a limited number of rows are shown.
      */
-    public $scrollCollapse = false;
+    public $scrollCollapse ;
     /**
      * @var array
      */
-    public $search = [
-        'caseInsensitive' => true,//bool Control case-sensitive filtering options
-        'regex' => false,//bool Enable / disable escaping of regular expression characters in the search term
-        'smart' => true,//bool Enable / disable DataTables' smart filtering
-    ];
+    public $search;
     /**
      * @var array Define an initial search for individual columns.
      */
-    public $searchCols = [];
+    public $searchCols;
     /**
      * @var array Set a throttle frequency for searching
      */
-    public $searchDelay = null;
+    public $searchDelay;
     /**
      * @var int Saved state validity duration
      */
-    public $stateDuration = 7200;
+    public $stateDuration;
     /**
      * @var array Set the zebra stripe class names for the rows in the table.
      */
-    public $stripeClasses = [];
+    public $stripeClasses;
     /**
      * @var int Tab index control for keyboard navigation
      */
-    public $tabIndex = 0;
+    public $tabIndex;
     /**
-     * @var DataLanguage
+     * @var array
      */
     public $language;
     /**
@@ -259,19 +254,10 @@ class DataTable extends Widget
 
     protected function getParams()
     {
-        if (empty($this->columns)) {
-            $this->guessColumns();
-        }
-
-        if (empty($this->language)) {
-            $this->guessLanguage();
-        }
-
         return array_merge($this->getFeatures(), $this->getOptions(), $this->getCallbacks(), [
             'columns' => $this->columns,
             'data' => $this->data,
             'ajax' => $this->ajax,
-            'language' => $this->language,
         ]);
     }
 
@@ -291,6 +277,7 @@ class DataTable extends Widget
             'searching',
             'serverSide',
             'stateSave',
+            'language',
         ];
         $result = [];
         foreach ($features as $attribute) {
@@ -360,23 +347,6 @@ class DataTable extends Widget
             }
         }
         return $results;
-    }
-
-    protected function guessColumns()
-    {
-        $model = reset($this->data);
-        if (is_array($model) || is_object($model)) {
-            foreach ($model as $name => $value) {
-                $this->columns[] = new DataColumn($name);
-            }
-        } else {
-            throw new InvalidConfigException('Unable to generate columns from the data. Please manually configure the "columns" property.');
-        }
-    }
-
-    protected function guessLanguage()
-    {
-        $this->language = new DataLanguage();
     }
 
     protected function initColumns()
