@@ -12,31 +12,29 @@ use Yii;
 use yii\base\Action;
 use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
-use yii\db\ActiveRecordInterface;
+use yii\db\ActiveQuery;
 use yii\web\Response;
 
 class DataTableAction extends Action
 {
     /**
-     * @var string class name of the model which will be handled by this action.
-     * The model class must implement [[ActiveRecordInterface]].
-     * This property must be set.
+     * @var ActiveQuery
      */
-    public $modelClass;
+    public $query;
 
     public function init()
     {
-        if ($this->modelClass === null) {
-            throw new InvalidConfigException(get_class($this) . '::$modelClass must be set.');
+        if ($this->query === null) {
+            throw new InvalidConfigException(get_class($this) . '::$query must be set.');
         }
     }
 
     public function run()
     {
-        /* @var $modelClass ActiveRecordInterface */
-        $modelClass = $this->modelClass;
-        $params = Yii::$app->request->getQueryParams();
-        $query = $modelClass::find()
+        $draw = Yii::$app->request->getQueryParam('draw');
+        $query = clone $this->query;
+        $query->where = null;
+        $query
             ->offset(Yii::$app->request->getQueryParam('start', 0))
             ->limit(Yii::$app->request->getQueryParam('length', -1));
         $search = Yii::$app->request->getQueryParam('search', ['value' => null, 'regex' => false]);
@@ -52,10 +50,11 @@ class DataTableAction extends Action
                 $query->orFilterWhere(['like', $column['data'], $value]);
             }
         }
+        $query->andWhere($this->query->where);
         $dataProvider = new ActiveDataProvider(['query' => $query]);
         $response = [
-            'draw' => $params['draw'],
-            'recordsTotal' => $modelClass::find()->count(),
+            'draw' => $draw,
+            'recordsTotal' => $this->query->count(),
             'recordsFiltered' => $dataProvider->getTotalCount(),
             'data' => $dataProvider->getModels(),
         ];
