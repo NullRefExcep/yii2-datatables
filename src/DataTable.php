@@ -9,6 +9,7 @@ namespace nullref\datatable;
 
 
 use yii\base\Widget;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\JsExpression;
@@ -39,35 +40,35 @@ class DataTable extends Widget
     /**
      * @var bool Feature control ordering (sorting) abilities in DataTables.
      */
-    public $ordering ;
+    public $ordering;
     /**
      * @var bool Enable or disable table pagination.
      */
-    public $paging ;
+    public $paging;
     /**
      * @var bool Feature control the processing indicator.
      */
-    public $processing ;
+    public $processing;
     /**
      * @var bool Enable horizontal scrolling
      */
-    public $scrollX ;
+    public $scrollX;
     /**
      * @var bool Enable vertical scrolling
      */
-    public $scrollY ;
+    public $scrollY;
     /**
      * @var bool Feature control search (filtering) abilities
      */
-    public $searching ;
+    public $searching;
     /**
      * @var bool Enable server-side filtering, paging and sorting calculations
      */
-    public $serverSide ;
+    public $serverSide;
     /**
      * @var bool Restore table state on page reload
      */
-    public $stateSave ;
+    public $stateSave;
     /**
      * @var array Load data for the table's content from an Ajax source
      */
@@ -75,7 +76,7 @@ class DataTable extends Widget
     /**
      * @var array Data to use as the display data for the table.
      */
-    public $data ;
+    public $data;
     /**
      * @var array Set column definition initialisation properties.
      */
@@ -83,15 +84,15 @@ class DataTable extends Widget
     /**
      * @var array Set column specific initialisation properties.
      */
-    public $columns ;
+    public $columns;
     /**
      * @var bool|int|array Delay the loading of server-side data until second draw
      */
-    public $deferLoading ;
+    public $deferLoading;
     /**
      * @var bool Destroy any existing table matching the selector and replace with the new options.
      */
-    public $destroy ;
+    public $destroy;
     /**
      * @var int Initial paging start point
      */
@@ -107,15 +108,15 @@ class DataTable extends Widget
     /**
      * @var bool Control which cell the order event handler will be applied to in a column
      */
-    public $orderCellsTop ;
+    public $orderCellsTop;
     /**
      * @var bool Highlight the columns being ordered in the table's body
      */
-    public $orderClasses ;
+    public $orderClasses;
     /**
      * @var array Initial order (sort) to apply to the table
      */
-    public $order ;
+    public $order;
     /**
      * @var array Ordering to always be applied to the table
      */
@@ -123,11 +124,11 @@ class DataTable extends Widget
     /**
      * @var bool Multiple column ordering ability control.
      */
-    public $orderMulti ;
+    public $orderMulti;
     /**
      * @var int Change the initial page length (number of rows per page)
      */
-    public $pageLength ;
+    public $pageLength;
 
     const PAGING_SIMPLE = 'simple';
     const PAGING_SIMPLE_NUMBERS = 'simple_numbers';
@@ -145,11 +146,11 @@ class DataTable extends Widget
     /**
      * @var bool Retrieve an existing DataTables instance
      */
-    public $retrieve ;
+    public $retrieve;
     /**
      * @var bool Allow the table to reduce in height when a limited number of rows are shown.
      */
-    public $scrollCollapse ;
+    public $scrollCollapse;
     /**
      * @var array
      */
@@ -234,7 +235,10 @@ class DataTable extends Widget
      * @var string State save - data manipulation callback
      */
     public $stateSaveParams;
-
+    /**
+     * @var array Html options for table
+     */
+    public $tableOptions = [];
 
     public function init()
     {
@@ -246,7 +250,7 @@ class DataTable extends Widget
     public function run()
     {
         $id = isset($this->id) ? $this->id : $this->getId();
-        echo Html::beginTag('table', ['id' => $id]);
+        echo Html::beginTag('table', ArrayHelper::merge(['id' => $id], $this->tableOptions));
 
         echo Html::endTag('table');
         $this->view->registerJs('jQuery("#' . $id . '").DataTable(' . Json::encode($this->getParams()) . ');');
