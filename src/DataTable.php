@@ -357,6 +357,14 @@ class DataTable extends Widget
     {
         if (isset($this->columns)) {
             foreach ($this->columns as $key => $value) {
+                if (is_string($value)) {
+                    $this->columns[$key] = ['data' => $value];
+                }
+                if (isset($value['type'])){
+                    if ($value['type'] == 'link'){
+                        $value['class'] = LinkColumn::className();
+                    }
+                }
                 if (isset($value['class'])) {
                     $column = \Yii::createObject($value);
                     $this->columns[$key] = $column;

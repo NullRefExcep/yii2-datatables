@@ -79,8 +79,7 @@ Properties of `LinkColumn`:
 ```php
 'assetManager' => [
     'bundles' => [
-        'datatables' => [
-            'class' => 'nullref\datatable\DataTableAsset',
+        'nullref\datatable\DataTableAsset' => [
             'styling' => \nullref\datatable\DataTableAsset::STYLING_BOOTSTRAP,
         ]
     ],
