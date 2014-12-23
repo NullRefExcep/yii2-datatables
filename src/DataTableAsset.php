@@ -20,10 +20,6 @@ class DataTableAsset extends AssetBundle
     public $fontAwesome = false;
     public $sourcePath = '@bower';
 
-    public $js = [
-        'datatables/media/js/jquery.dataTables.min.js',
-    ];
-
     public $depends = [
         'yii\web\JqueryAsset',
     ];
@@ -32,6 +28,9 @@ class DataTableAsset extends AssetBundle
     {
         parent::init();
 
+        if (empty($this->js)) {
+            $this->js = ['datatables/media/js/jquery.dataTables' . (YII_ENV_DEV ? '' : '.min') . '.js'];
+        }
         switch ($this->styling) {
             case self::STYLING_JUI:
                 $this->depends[] = 'yii\jui\JuiAsset';
@@ -43,19 +42,14 @@ class DataTableAsset extends AssetBundle
                 $this->css[] = 'datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css';
                 $this->js[] = 'datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js';
                 break;
-            default:
-                $this->css[] = 'datatables/media/css/jquery.dataTables.min.css';
+            case self::STYLING_DEFAULT:
+                $this->css[] = 'datatables/media/css/jquery.dataTables' . (YII_ENV_DEV ? '' : '.min') . '.css';
+                break;
+            default;
         }
 
         if ($this->fontAwesome) {
             $this->css[] = 'dataTables.fontAwesome.css';
-        }
-
-        if (YII_ENV_DEV) {
-            $this->js[0] = 'datatables/media/js/jquery.dataTables.js';
-            $this->css = [
-                'datatables/media/css/jquery.dataTables.css',
-            ];
         }
     }
 
