@@ -358,7 +358,7 @@ class DataTable extends Widget
         if (isset($this->columns)) {
             foreach ($this->columns as $key => $value) {
                 if (is_string($value)) {
-                    $this->columns[$key] = ['data' => $value];
+                    $this->columns[$key] = ['data' => $value, 'title' => Inflector::camel2words($value)];
                 }
                 if (isset($value['type'])){
                     if ($value['type'] == 'link'){
