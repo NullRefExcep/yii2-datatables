@@ -11,6 +11,7 @@ namespace nullref\datatable;
 use Yii;
 use yii\base\Action;
 use yii\base\InvalidConfigException;
+use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 use yii\web\Response;
 
@@ -20,21 +21,24 @@ class DataTableAction extends Action
      * @var SearchModelInterface
      */
     public $searchModel;
-
+    /**
+     * @var ActiveQuery
+     */
+    public $query;
 
     public function init()
     {
-        if ($this->searchModel === null) {
-            throw new InvalidConfigException(get_class($this) . '::$searchModel must be set.');
+        if ($this->searchModel === null && $this->query === null) {
+            throw new InvalidConfigException('Either ' . get_class($this) . '::$searchModel or ' . get_class($this) . '::$query must be set.');
         }
-        if (!$this->searchModel instanceof SearchModelInterface) {
+        if (isset($this->searchModel) && !$this->searchModel instanceof SearchModelInterface) {
             throw new InvalidConfigException(get_class($this) . '::$searchModel must implement SearchModelInterface.');
         }
     }
 
     public function run()
     {
-        $dataProvider = $this->searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = isset($this->searchModel) ? $this->searchModel->search(Yii::$app->request->queryParams) : new ActiveDataProvider(['query' => $this->query]);
         /** @var ActiveQuery $originalQuery */
         $originalQuery = $dataProvider->query;
         $actionQuery = clone $originalQuery;
