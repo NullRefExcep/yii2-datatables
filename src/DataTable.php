@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\JsExpression;
+use yii\helpers\Inflector;
 
 class DataTable extends Widget
 {
@@ -357,6 +358,14 @@ class DataTable extends Widget
     {
         if (isset($this->columns)) {
             foreach ($this->columns as $key => $value) {
+                if (is_string($value)) {
+                    $this->columns[$key] = ['data' => $value, 'title' => Inflector::camel2words($value)];
+                }
+                if (isset($value['type'])){
+                    if ($value['type'] == 'link'){
+                        $value['class'] = LinkColumn::className();
+                    }
+                }
                 if (isset($value['class'])) {
                     $column = \Yii::createObject($value);
                     $this->columns[$key] = $column;
