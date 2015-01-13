@@ -18,27 +18,20 @@ use yii\web\Response;
 class DataTableAction extends Action
 {
     /**
-     * @var SearchModelInterface
-     */
-    public $searchModel;
-    /**
      * @var ActiveQuery
      */
     public $query;
 
     public function init()
     {
-        if ($this->searchModel === null && $this->query === null) {
-            throw new InvalidConfigException('Either ' . get_class($this) . '::$searchModel or ' . get_class($this) . '::$query must be set.');
-        }
-        if (isset($this->searchModel) && !$this->searchModel instanceof SearchModelInterface) {
-            throw new InvalidConfigException(get_class($this) . '::$searchModel must implement SearchModelInterface.');
+        if ($this->query === null) {
+            throw new InvalidConfigException(get_class($this) . '::$query must be set.');
         }
     }
 
     public function run()
     {
-        $dataProvider = isset($this->searchModel) ? $this->searchModel->search(Yii::$app->request->queryParams) : new ActiveDataProvider(['query' => $this->query]);
+        $dataProvider = new ActiveDataProvider(['query' => $this->query, 'pagination' => false]);
         /** @var ActiveQuery $originalQuery */
         $originalQuery = $dataProvider->query;
         $actionQuery = clone $originalQuery;

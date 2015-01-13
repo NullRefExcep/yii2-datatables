@@ -17,6 +17,10 @@
         {
             "name": "Serhiy Vinichuk",
             "email": "serhiyvinichuk@gmail.com"
+        },
+        {
+            "name": "Dmytro Karpovych",
+            "email": "ZAYEC77@gmail.com"
         }
     ],
     "minimum-stability": "stable",
