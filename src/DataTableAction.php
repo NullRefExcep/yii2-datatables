@@ -45,7 +45,7 @@ class DataTableAction extends Action
         $order = Yii::$app->request->getQueryParam('order', []);
         foreach ($order as $key => $item) {
             $sort = $item['dir'] == 'desc' ? SORT_DESC : SORT_ASC;
-            $actionQuery->addOrderBy([$columns[$key]['data'] => $sort]);
+            $actionQuery->addOrderBy([$columns[$item['column']]['data'] => $sort]);
         }
         foreach ($columns as $column) {
             if ($column['searchable'] == 'true') {

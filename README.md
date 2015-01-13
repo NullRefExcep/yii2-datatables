@@ -85,3 +85,18 @@ Properties of `LinkColumn`:
     ],
 ],
 ```
+## Custom assets
+It's posible to use custom styles and scripts:
+```php
+'nullref\datatable\DataTableAsset' => [
+    'sourcePath' => '@webroot/js/plugin/datatables/',
+    'js' => [
+        'jquery.dataTables-1.10-cust.js',
+        'DT_bootstrap.js',
+    ],
+    'css' => [
+        'data-table.css',
+    ],
+    'styling' => false,
+]
+```
