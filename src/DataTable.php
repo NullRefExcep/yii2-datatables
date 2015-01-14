@@ -11,12 +11,19 @@ namespace nullref\datatable;
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\helpers\Inflector;
 use yii\helpers\Json;
 use yii\web\JsExpression;
-use yii\helpers\Inflector;
 
 class DataTable extends Widget
 {
+    const COLUMN_TYPE_DATE = 'date';
+    const COLUMN_TYPE_NUM = 'num';
+    const COLUMN_TYPE_NUM_FMT = 'num-fmt';
+    const COLUMN_TYPE_HTML_NUM = 'html-num';
+    const COLUMN_TYPE_HTML_NUM_FMT = 'html-num-fmt';
+    const COLUMN_TYPE_STRING = 'string';
+
     public $id;
     /**
      * @var boolean Feature control DataTables' smart column width handling
@@ -361,8 +368,8 @@ class DataTable extends Widget
                 if (is_string($value)) {
                     $this->columns[$key] = ['data' => $value, 'title' => Inflector::camel2words($value)];
                 }
-                if (isset($value['type'])){
-                    if ($value['type'] == 'link'){
+                if (isset($value['type'])) {
+                    if ($value['type'] == 'link') {
                         $value['class'] = LinkColumn::className();
                     }
                 }
