@@ -20,32 +20,17 @@ or add
 ```
 to the require section of your `composer.json` file.
 
-## Server-side processing
-
-To enable server-side processing add `DataTableAction` to controller like this:
+## Basic Usage
 
 ```php
- class SomeController extends Controller
- {
-     public function actions()
-     {
-         return [
-             'datatables' => [
-                 'class' => 'nullref\datatable\DataTableAction',
-                 'query' => Model::find(),
-             ],
-         ];
-     }
-     
-}
-```
-
-In DataTable options specify: 
-```js
-{
-    "serverSide": true,
-    "ajax": "/datatables"
-}
+<?= \nullref\datatable\DataTable::widget([
+    'data' => $dataProvider->getModels(),
+    'columns' => [
+        'id',
+        'name',
+        'email'
+    ],
+]) ?>
 ```
 
 ## Add Links to row
@@ -100,3 +85,58 @@ It's posible to use custom styles and scripts:
     'styling' => false,
 ]
 ```
+
+## Server-side processing
+
+To enable server-side processing add `DataTableAction` to controller like this:
+
+```php
+ class SomeController extends Controller
+ {
+     public function actions()
+     {
+         return [
+             'datatables' => [
+                 'class' => 'nullref\datatable\DataTableAction',
+                 'query' => Model::find(),
+             ],
+         ];
+     }
+     
+}
+```
+
+Searching and ordering can be customized using closures
+```
+public function actions()
+{
+    return [
+         'datatables' => [
+             'class' => 'nullref\datatable\DataTableAction',
+             'query' => Model::find(),
+             'applyOrder' => function($query, $columns, $order) {
+                //custom ordering logic
+                return $query;
+             },
+             'applyFilter' => function($query, $columns, $search) {
+                //custom search logic
+                return $query;
+             },
+         ],
+    ];
+}
+
+```
+
+
+In DataTable options specify: 
+```js
+{
+    "serverSide": true,
+    "ajax": "/datatables"
+}
+```
+
+
+
+
