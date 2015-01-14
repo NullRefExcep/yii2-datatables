@@ -107,7 +107,7 @@ To enable server-side processing add `DataTableAction` to controller like this:
 ```
 
 Searching and ordering can be customized using closures
-```
+```php
 public function actions()
 {
     return [
