@@ -328,7 +328,8 @@ class DataTable extends Widget
             'searchDelay',
             'stateDuration',
             'stripeClasses',
-            'tabIndex'
+            'tabIndex',
+            'columnDefs'
         ];
         $result = [];
         foreach ($options as $attribute) {
