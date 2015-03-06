@@ -293,7 +293,7 @@ class DataTable extends Widget
         ];
         $result = [];
         foreach ($features as $attribute) {
-            if (!empty($this->$attribute)) {
+            if ($this->$attribute !== null) {
                 $result[$attribute] = $this->$attribute;
             }
         }
@@ -327,7 +327,7 @@ class DataTable extends Widget
         ];
         $result = [];
         foreach ($options as $attribute) {
-            if (!empty($this->$attribute)) {
+            if ($this->$attribute !== null) {
                 $result[$attribute] = $this->$attribute;
             }
         }
@@ -354,7 +354,7 @@ class DataTable extends Widget
         ];
         $results = [];
         foreach ($callbacks as $attribute) {
-            if (!empty($this->$attribute)) {
+            if ($this->$attribute !== null) {
                 $results[$attribute] = new JsExpression($this->$attribute);
             }
         }
@@ -382,4 +382,4 @@ class DataTable extends Widget
         }
     }
 
-} 
+}
