@@ -247,6 +247,10 @@ class DataTable extends Widget
      * @var array Html options for table
      */
     public $tableOptions = [];
+    /**
+     * @var array Allows you to specify exactly where in the DOM you want DataTables to inject the various controls
+     */
+    public $sDom;
 
     public function init()
     {
@@ -290,6 +294,7 @@ class DataTable extends Widget
             'serverSide',
             'stateSave',
             'language',
+            'sDom',
         ];
         $result = [];
         foreach ($features as $attribute) {
@@ -323,7 +328,8 @@ class DataTable extends Widget
             'searchDelay',
             'stateDuration',
             'stripeClasses',
-            'tabIndex'
+            'tabIndex',
+            'columnDefs'
         ];
         $result = [];
         foreach ($options as $attribute) {
