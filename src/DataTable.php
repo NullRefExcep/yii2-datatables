@@ -13,8 +13,67 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Inflector;
 use yii\helpers\Json;
-use yii\web\JsExpression;
 
+/**
+ * Class DataTable
+ * @package nullref\datatable
+ * Features
+ * @property bool $autoWidth Feature control DataTables' smart column width handling
+ * @property bool $deferRender Feature control deferred rendering for additional speed of initialisation.
+ * @property bool $info Feature control table information display field
+ * @property bool $jQueryUI Use markup and classes for the table to be themed by jQuery UI ThemeRoller.
+ * @property bool $lengthChange Feature control the end user's ability to change the paging display length of the table.
+ * @property bool $ordering Feature control ordering (sorting) abilities in DataTables.
+ * @property bool $paging Enable or disable table pagination.
+ * @property bool $processing Feature control the processing indicator.
+ * @property bool $scrollX Enable horizontal scrolling
+ * @property bool $scrollY Enable vertical scrolling
+ * @property bool $searching Feature control search (filtering) abilities
+ * @property bool $serverSide Enable server-side filtering, paging and sorting calculations
+ * @property bool $stateSave Restore table state on page reload
+ * @property array $language
+ * Options
+ * @property array $ajax Load data for the table's content from an Ajax source
+ * @property array $data Data to use as the display data for the table.
+ * @property array $columnDefs Set column definition initialisation properties.
+ * @property array $columns Set column specific initialisation properties.
+ * @property bool|int|array $deferLoading Delay the loading of server-side data until second draw
+ * @property bool $destroy Destroy any existing table matching the selector and replace with the new options.
+ * @property int $displayStart Initial paging start point
+ * @property string $dom Define the table control elements to appear on the page and in what order
+ * @property array $lengthMenu Change the options in the page length `select` list.
+ * @property bool $orderCellsTop Control which cell the order event handler will be applied to in a column
+ * @property bool $orderClasses Highlight the columns being ordered in the table's body
+ * @property array $order Initial order (sort) to apply to the table
+ * @property array $orderFixed Ordering to always be applied to the table
+ * @property bool $orderMulti Multiple column ordering ability control.
+ * @property int $pageLength Change the initial page length (number of rows per page)
+ * @property string $pagingType Pagination button display options.
+ * @property string|array $renderer Display component renderer types
+ * @property bool $retrieve Retrieve an existing DataTables instance
+ * @property bool $scrollCollapse Allow the table to reduce in height when a limited number of rows are shown.
+ * @property array $search
+ * @property array $searchCols Define an initial search for individual columns.
+ * @property array $searchDelay Set a throttle frequency for searching
+ * @property int $stateDuration Saved state validity duration
+ * @property array $stripeClasses Set the zebra stripe class names for the rows in the table.
+ * @property int $tabIndex Tab index control for keyboard navigation
+ * Callbacks
+ * @property string $createdRow Callback for whenever a TR element is created for the table's body.
+ * @property string $drawCallback Function that is called every time DataTables performs a draw.
+ * @property string $footerCallback Footer display callback function.
+ * @property string $formatNumber Number formatting callback function.
+ * @property string $headerCallback Header display callback function.
+ * @property string $infoCallback Table summary information display callback.
+ * @property string $initComplete Initialisation complete callback.
+ * @property string $preDrawCallback Pre-draw callback.
+ * @property string $rowCallback Row draw callback.
+ * @property string $stateLoadCallback Callback that defines where and how a saved state should be loaded.
+ * @property string $stateLoaded State loaded callback.
+ * @property string $stateLoadParams State loaded - data manipulation callback
+ * @property string $stateSaveCallback Callback that defines how the table state is stored and where.
+ * @property string $stateSaveParams State save - data manipulation callback
+ */
 class DataTable extends Widget
 {
     const COLUMN_TYPE_DATE = 'date';
@@ -24,225 +83,14 @@ class DataTable extends Widget
     const COLUMN_TYPE_HTML_NUM_FMT = 'html-num-fmt';
     const COLUMN_TYPE_STRING = 'string';
 
-    public $id;
-    /**
-     * @var boolean Feature control DataTables' smart column width handling
-     */
-    public $autoWidth;
-    /**
-     * @var bool Feature control deferred rendering for additional speed of initialisation.
-     */
-    public $deferRender;
-    /**
-     * @var bool Feature control table information display field
-     */
-    public $info;
-    /**
-     * @var bool Use markup and classes for the table to be themed by jQuery UI ThemeRoller.
-     */
-    public $jQueryUI;
-    /**
-     * @var bool Feature control the end user's ability to change the paging display length of the table.
-     */
-    public $lengthChange;
-    /**
-     * @var bool Feature control ordering (sorting) abilities in DataTables.
-     */
-    public $ordering;
-    /**
-     * @var bool Enable or disable table pagination.
-     */
-    public $paging;
-    /**
-     * @var bool Feature control the processing indicator.
-     */
-    public $processing;
-    /**
-     * @var bool Enable horizontal scrolling
-     */
-    public $scrollX;
-    /**
-     * @var bool Enable vertical scrolling
-     */
-    public $scrollY;
-    /**
-     * @var bool Feature control search (filtering) abilities
-     */
-    public $searching;
-    /**
-     * @var bool Enable server-side filtering, paging and sorting calculations
-     */
-    public $serverSide;
-    /**
-     * @var bool Restore table state on page reload
-     */
-    public $stateSave;
-    /**
-     * @var array Load data for the table's content from an Ajax source
-     */
-    public $ajax;
-    /**
-     * @var array Data to use as the display data for the table.
-     */
-    public $data;
-    /**
-     * @var array Set column definition initialisation properties.
-     */
-    public $columnDefs;
-    /**
-     * @var array Set column specific initialisation properties.
-     */
-    public $columns;
-    /**
-     * @var bool|int|array Delay the loading of server-side data until second draw
-     */
-    public $deferLoading;
-    /**
-     * @var bool Destroy any existing table matching the selector and replace with the new options.
-     */
-    public $destroy;
-    /**
-     * @var int Initial paging start point
-     */
-    public $displayStart;
-    /**
-     * @var string Define the table control elements to appear on the page and in what order
-     */
-    public $dom;
-    /**
-     * @var array Change the options in the page length `select` list.
-     */
-    public $lengthMenu;
-    /**
-     * @var bool Control which cell the order event handler will be applied to in a column
-     */
-    public $orderCellsTop;
-    /**
-     * @var bool Highlight the columns being ordered in the table's body
-     */
-    public $orderClasses;
-    /**
-     * @var array Initial order (sort) to apply to the table
-     */
-    public $order;
-    /**
-     * @var array Ordering to always be applied to the table
-     */
-    public $orderFixed;
-    /**
-     * @var bool Multiple column ordering ability control.
-     */
-    public $orderMulti;
-    /**
-     * @var int Change the initial page length (number of rows per page)
-     */
-    public $pageLength;
-
     const PAGING_SIMPLE = 'simple';
     const PAGING_SIMPLE_NUMBERS = 'simple_numbers';
     const PAGING_FULL = 'full';
     const PAGING_FULL_NUMBERS = 'full_numbers';
 
-    /**
-     * @var string Pagination button display options.
-     */
-    public $pagingType;
-    /**
-     * @var string|array Display component renderer types
-     */
-    public $renderer;
-    /**
-     * @var bool Retrieve an existing DataTables instance
-     */
-    public $retrieve;
-    /**
-     * @var bool Allow the table to reduce in height when a limited number of rows are shown.
-     */
-    public $scrollCollapse;
-    /**
-     * @var array
-     */
-    public $search;
-    /**
-     * @var array Define an initial search for individual columns.
-     */
-    public $searchCols;
-    /**
-     * @var array Set a throttle frequency for searching
-     */
-    public $searchDelay;
-    /**
-     * @var int Saved state validity duration
-     */
-    public $stateDuration;
-    /**
-     * @var array Set the zebra stripe class names for the rows in the table.
-     */
-    public $stripeClasses;
-    /**
-     * @var int Tab index control for keyboard navigation
-     */
-    public $tabIndex;
-    /**
-     * @var array
-     */
-    public $language;
-    /**
-     * @var string Callback for whenever a TR element is created for the table's body.
-     */
-    public $createdRow;
-    /**
-     * @var string Function that is called every time DataTables performs a draw.
-     */
-    public $drawCallback;
-    /**
-     * @var string Footer display callback function.
-     */
-    public $footerCallback;
-    /**
-     * @var string Number formatting callback function.
-     */
-    public $formatNumber;
-    /**
-     * @var string Header display callback function.
-     */
-    public $headerCallback;
-    /**
-     * @var string Table summary information display callback.
-     */
-    public $infoCallback;
-    /**
-     * @var string Initialisation complete callback.
-     */
-    public $initComplete;
-    /**
-     * @var string Pre-draw callback.
-     */
-    public $preDrawCallback;
-    /**
-     * @var string Row draw callback.
-     */
-    public $rowCallback;
-    /**
-     * @var string Callback that defines where and how a saved state should be loaded.
-     */
-    public $stateLoadCallback;
-    /**
-     * @var string State loaded callback.
-     */
-    public $stateLoaded;
-    /**
-     * @var string State loaded - data manipulation callback
-     */
-    public $stateLoadParams;
-    /**
-     * @var string Callback that defines how the table state is stored and where.
-     */
-    public $stateSaveCallback;
-    /**
-     * @var string State save - data manipulation callback
-     */
-    public $stateSaveParams;
+    protected $_options = [];
+
+    public $id;
     /**
      * @var array Html options for table
      */
@@ -266,99 +114,7 @@ class DataTable extends Widget
 
     protected function getParams()
     {
-        return array_merge($this->getFeatures(), $this->getOptions(), $this->getCallbacks(), [
-            'columns' => $this->columns,
-            'data' => $this->data,
-            'ajax' => $this->ajax,
-        ]);
-    }
-
-    protected function getFeatures()
-    {
-        $features = [
-            'autoWidth',
-            'deferRender',
-            'info',
-            'jQueryUI',
-            'lengthChange',
-            'ordering',
-            'paging',
-            'processing',
-            'scrollX',
-            'scrollY',
-            'searching',
-            'serverSide',
-            'stateSave',
-            'language',
-        ];
-        $result = [];
-        foreach ($features as $attribute) {
-            if ($this->$attribute !== null) {
-                $result[$attribute] = $this->$attribute;
-            }
-        }
-        return $result;
-    }
-
-    protected function getOptions()
-    {
-        $options = [
-            'deferLoading',
-            'destroy',
-            'displayStart',
-            'dom',
-            'lengthMenu',
-            'orderCellsTop',
-            'orderClasses',
-            'order',
-            'orderFixed',
-            'orderMulti',
-            'pageLength',
-            'pagingType',
-            'renderer',
-            'retrieve',
-            'scrollCollapse',
-            'search',
-            'searchCols',
-            'searchDelay',
-            'stateDuration',
-            'stripeClasses',
-            'tabIndex'
-        ];
-        $result = [];
-        foreach ($options as $attribute) {
-            if ($this->$attribute !== null) {
-                $result[$attribute] = $this->$attribute;
-            }
-        }
-        return $result;
-    }
-
-    protected function getCallbacks()
-    {
-        $callbacks = [
-            'createdRow',
-            'drawCallback',
-            'footerCallback',
-            'formatNumber',
-            'headerCallback',
-            'infoCallback',
-            'initComplete',
-            'preDrawCallback',
-            'rowCallback',
-            'stateLoadCallback',
-            'stateLoaded',
-            'stateLoadParams',
-            'stateSaveCallback',
-            'stateSaveParams',
-        ];
-        $results = [];
-        foreach ($callbacks as $attribute) {
-            if ($this->$attribute !== null) {
-                $results[$attribute] = new JsExpression($this->$attribute);
-            }
-        }
-        return $results;
+        return $this->_options;
     }
 
     protected function initColumns()
@@ -378,8 +134,18 @@ class DataTable extends Widget
                     $this->columns[$key] = $column;
                 }
             }
-
         }
     }
+
+    public function __set($name, $value)
+    {
+        return $this->_options[$name] = $value;
+    }
+
+    public function __get($name)
+    {
+        return isset($this->_options[$name]) ? $this->_options[$name] : null;
+    }
+
 
 }
