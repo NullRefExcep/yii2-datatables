@@ -10,7 +10,8 @@
         "jquery",
         "datatable",
         "datatables",
-        "plugin"
+        "plugin",
+        "jQuery"
     ],
     "license": "MIT",
     "authors": [
