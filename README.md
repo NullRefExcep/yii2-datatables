@@ -3,8 +3,6 @@ Yii2 DataTables
 
 Yii2 Widget for [DataTables](https://github.com/DataTables/DataTables) plug-in for jQuery
 
-**Work in Progress. Not ready for production**
-
 ## Installation
 
 The preferred way to install this extension is through composer.
@@ -12,11 +10,11 @@ The preferred way to install this extension is through composer.
 Either run
 
 ```
-composer require "nullref/yii2-datatables" "*"
+composer require nullref/yii2-datatables
 ```
 or add
 ```
-"nullref/yii2-datatables": "*"
+"nullref/yii2-datatables": "~1.0"
 ```
 to the require section of your `composer.json` file.
 
