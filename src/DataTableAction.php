@@ -53,27 +53,28 @@ class DataTableAction extends Action
     {
         /** @var ActiveQuery $originalQuery */
         $originalQuery = $this->query;
-        $actionQuery = clone $originalQuery;
+        $filterQuery = clone $originalQuery;
         $draw = Yii::$app->request->getQueryParam('draw');
-        $actionQuery->where = null;
-        $actionQuery
-            ->offset(Yii::$app->request->getQueryParam('start', 0))
-            ->limit(Yii::$app->request->getQueryParam('length', -1));
+        $filterQuery->where = null;
         $search = Yii::$app->request->getQueryParam('search', ['value' => null, 'regex' => false]);
         $columns = Yii::$app->request->getQueryParam('columns', []);
         $order = Yii::$app->request->getQueryParam('order', []);
-        $actionQuery = $this->applyFilter($actionQuery, $columns, $search);
-        $actionQuery = $this->applyOrder($actionQuery, $columns, $order);
+        $filterQuery = $this->applyFilter($filterQuery, $columns, $search);
+        $filterQuery = $this->applyOrder($filterQuery, $columns, $order);
         if (!empty($originalQuery->where)) {
-            $actionQuery->andWhere($originalQuery->where);
+            $filterQuery->andWhere($originalQuery->where);
         }
-        $dataProvider = new ActiveDataProvider(['query' => $actionQuery, 'pagination' => false]);
+        $actionQuery = clone $filterQuery;
+        $filterQuery
+            ->offset(Yii::$app->request->getQueryParam('start', 0))
+            ->limit(Yii::$app->request->getQueryParam('length', -1));
+        $dataProvider = new ActiveDataProvider(['query' => $filterQuery, 'pagination' => false]);
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         try {
             $response = [
                 'draw' => (int)$draw,
                 'recordsTotal' => (int)$originalQuery->count(),
-                'recordsFiltered' => (int)$dataProvider->getTotalCount(),
+                'recordsFiltered' => $actionQuery->count(),
                 'data' => $dataProvider->getModels(),
             ];
         } catch (\Exception $e) {
