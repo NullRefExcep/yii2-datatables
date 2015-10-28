@@ -127,12 +127,14 @@ public function actions()
 ```
 
 
-In DataTable options specify: 
-```js
-{
-    "serverSide": true,
-    "ajax": "/datatables"
-}
+And add options to widget: 
+
+```php
+    <?= \nullref\datatable\DataTable::widget([
+        /** ... */
+        'serverSide' => true,
+        'ajax' => '/site/datatables',
+    ]) ?>
 ```
 
 
