@@ -35,7 +35,7 @@ class DataTableAsset extends AssetBundle
             case self::STYLING_JUI:
                 $this->depends[] = 'yii\jui\JuiAsset';
                 $this->css[] = 'datatables-plugins/integration/jqueryui/dataTables.jqueryui.css';
-                $this->js[] = 'datatabbles-plugins/integration/jqueryui/dataTables.jqueryui.min.js';
+                $this->js[] = 'datatables-plugins/integration/jqueryui/dataTables.jqueryui.min.js';
                 break;
             case self::STYLING_BOOTSTRAP:
                 $this->depends[] = 'yii\bootstrap\BootstrapAsset';
