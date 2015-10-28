@@ -36,7 +36,8 @@ class LinkColumn extends \yii\base\Object
             var p = ' . Json::encode($this->queryParams) . ';
             var q = {};for (var i = 0; i < p.length; i++) {q[p[i]] = row[p[i]];}
             var link = jQuery(\'' . Html::a($this->label, $this->url, $this->options) . '\');
-            link.attr("id", link.attr("id") + meta.row);link.attr("href", link.attr("href") + "?" + jQuery.param(q));
+            var paramPrefix = ((link.attr("href").indexOf("?") < 0) ? "?" : "&");
+            link.attr("id", link.attr("id") + meta.row);link.attr("href", link.attr("href") + paramPrefix + jQuery.param(q));
             return link.get()[0].outerHTML;}');
         }
     }
