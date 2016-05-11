@@ -68,14 +68,22 @@ class DataTableAction extends Action
         $filterQuery
             ->offset(Yii::$app->request->getQueryParam('start', 0))
             ->limit(Yii::$app->request->getQueryParam('length', -1));
+        /* Begin of fix - serverSide pagination - get pagination from server side - Yii
         $dataProvider = new ActiveDataProvider(['query' => $filterQuery, 'pagination' => false]);
+        */
+        $dataProvider = new ActiveDataProvider(['query' => $actionQuery, 'pagination' => ['pageSize' => Yii::$app->request->getQueryParam('length', 10)] ]);
+        // End of fix - serverSide pagination - get pagination from server side - Yii
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         try {
             $response = [
                 'draw' => (int)$draw,
                 'recordsTotal' => (int)$originalQuery->count(),
-                'recordsFiltered' => $actionQuery->count(),
+                'recordsFiltered' => (int)$dataProvider->getTotalCount(),
+                /* Begin of fix - get actual data from server according to filters, offset and limit
                 'data' => $dataProvider->getModels(),
+                */
+                'data' => $actionQuery->all(),
+            	// End of fix - get actual data from server according to filters, offset and limit
             ];
         } catch (\Exception $e) {
             return ['error' => $e->getMessage()];
@@ -96,6 +104,11 @@ class DataTableAction extends Action
         }
 
         foreach ($order as $key => $item) {
+            // Begin of fix - avoid failure on columns not being orderable
+        	if (array_key_exists('orderable', $columns[$item['column']]) && $columns[$item['column']]['orderable'] === 'false') {
+        		continue;
+        	}
+        	// End of fix - avoid failure on columns not being orderable
             $sort = $item['dir'] == 'desc' ? SORT_DESC : SORT_ASC;
             $query->addOrderBy([$columns[$item['column']]['data'] => $sort]);
         }
