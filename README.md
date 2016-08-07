@@ -31,6 +31,23 @@ to the require section of your `composer.json` file.
 ]) ?>
 ```
 
+## DataTable options
+Also you can use all [Datatables options](https://datatables.net/reference/option/)
+
+To pass them as widget options:
+```php
+<?= \nullref\datatable\DataTable::widget([
+    'data' => $dataProvider->getModels(),
+    'scrollY' => '200px',
+    'scrollCollapse' => true,
+    'paging' => false,
+    'columns' => [
+        'name',
+        'email'
+    ],
+]) ?>
+```
+
 ## Add Links to row
 
 ```php
@@ -136,7 +153,3 @@ And add options to widget:
         'ajax' => '/site/datatables',
     ]) ?>
 ```
-
-
-
-
