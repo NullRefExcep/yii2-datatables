@@ -143,6 +143,7 @@ public function actions()
 
 ```
 
+If you need to get some relation data you can call `join` or similar methods from `$query` in `applyFilter` closure.
 
 And add options to widget: 
 
