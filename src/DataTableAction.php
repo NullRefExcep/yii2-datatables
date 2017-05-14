@@ -50,6 +50,22 @@ class DataTableAction extends Action
      */
     public $applyFilter;
 
+    /**
+     * Format data
+     * Signature is following:
+     * function ($query, $columns)
+     * @var callable
+     */
+    public $formatData;
+
+    /**
+     * Format response
+     * Signature is following:
+     * function ($response)
+     * @var callable
+     */
+    public $formatResponse;
+
     public function init()
     {
         if ($this->query === null) {
@@ -89,12 +105,13 @@ class DataTableAction extends Action
                 'draw' => (int)$draw,
                 'recordsTotal' => (int)$originalQuery->count(),
                 'recordsFiltered' => (int)$dataProvider->getTotalCount(),
-                'data' => $filterQuery->all(),
+                'data' => $this->formatData($filterQuery, $columns),
             ];
         } catch (\Exception $e) {
             return ['error' => $e->getMessage()];
         }
-        return $response;
+
+        return $this->formatResponse($response);
     }
 
     /**
@@ -142,5 +159,32 @@ class DataTableAction extends Action
             $query->addOrderBy([$columns[$item['column']]['data'] => $sort]);
         }
         return $query;
+    }
+
+    /**
+     * @param ActiveQuery $query
+     * @param array $columns
+     * @return ActiveQuery
+     */
+    public function formatData(ActiveQuery $query, $columns)
+    {
+        if ($this->formatData !== null) {
+            return call_user_func($this->formatData, $query, $columns);
+        }
+
+        return $query->all();
+    }
+
+    /**
+     * @param array $response
+     * @return ActiveQuery
+     */
+    public function formatResponse($response)
+    {
+        if ($this->formatResponse !== null) {
+            return call_user_func($this->formatResponse, $response);
+        }
+
+        return $response;
     }
 } 
