@@ -23,6 +23,13 @@ use yii\web\Response;
 class DataTableAction extends Action
 {
     /**
+     * GET or POST
+     *
+     * @var string
+     */
+    public $requestMethod = "GET";
+
+    /**
      * @var ActiveQuery
      */
     public $query;
@@ -50,24 +57,31 @@ class DataTableAction extends Action
         }
     }
 
+    protected function getParam($name, $defaultValue = null)
+    {
+        return $this->requestMethod == 'GET' ?
+            Yii::$app->request->getQueryParam($name, $defaultValue) :
+            Yii::$app->request->getBodyParam($name, $defaultValue);
+    }
+
     public function run()
     {
         /** @var ActiveQuery $originalQuery */
         $originalQuery = $this->query;
         $filterQuery = clone $originalQuery;
-        $draw = Yii::$app->request->getQueryParam('draw');
+        $draw = $this->getParam('draw');
         $filterQuery->where = null;
-        $search = Yii::$app->request->getQueryParam('search', ['value' => null, 'regex' => false]);
-        $columns = Yii::$app->request->getQueryParam('columns', []);
-        $order = Yii::$app->request->getQueryParam('order', []);
+        $search = $this->getParam('search', ['value' => null, 'regex' => false]);
+        $columns = $this->getParam('columns', []);
+        $order = $this->getParam('order', []);
         $filterQuery = $this->applyFilter($filterQuery, $columns, $search);
         $filterQuery = $this->applyOrder($filterQuery, $columns, $order);
         if (!empty($originalQuery->where)) {
             $filterQuery->andWhere($originalQuery->where);
         }
         $filterQuery
-            ->offset(Yii::$app->request->getQueryParam('start', 0))
-            ->limit(Yii::$app->request->getQueryParam('length', -1));
+            ->offset($this->getParam('start', 0))
+            ->limit($this->getParam('length', -1));
         $dataProvider = new ActiveDataProvider(['query' => $filterQuery, 'pagination' => ['pageSize' => Yii::$app->request->getQueryParam('length', 10)]]);
         Yii::$app->response->format = Response::FORMAT_JSON;
         try {
