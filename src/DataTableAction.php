@@ -13,6 +13,7 @@ use yii\base\Action;
 use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 use yii\web\Response;
 
 /**
@@ -23,11 +24,16 @@ use yii\web\Response;
 class DataTableAction extends Action
 {
     /**
-     * GET or POST
-     *
+     * Types of request method
+     */
+    const REQUEST_METHOD_GET = 'GET';
+    const REQUEST_METHOD_POST = 'POST';
+
+    /**
+     * @see \nullref\datatable\DataTableAction::getParam
      * @var string
      */
-    public $requestMethod = "GET";
+    public $requestMethod = self::REQUEST_METHOD_GET;
 
     /**
      * @var ActiveQuery
@@ -66,6 +72,10 @@ class DataTableAction extends Action
      */
     public $formatResponse;
 
+    /**
+     * Check if query is configured
+     * @throws InvalidConfigException
+     */
     public function init()
     {
         if ($this->query === null) {
@@ -73,13 +83,9 @@ class DataTableAction extends Action
         }
     }
 
-    protected function getParam($name, $defaultValue = null)
-    {
-        return $this->requestMethod == 'GET' ?
-            Yii::$app->request->getQueryParam($name, $defaultValue) :
-            Yii::$app->request->getBodyParam($name, $defaultValue);
-    }
-
+    /**
+     * @return array|ActiveRecord[]
+     */
     public function run()
     {
         /** @var ActiveQuery $originalQuery */
@@ -112,6 +118,19 @@ class DataTableAction extends Action
         }
 
         return $this->formatResponse($response);
+    }
+
+    /**
+     * Extract param from request
+     * @param $name
+     * @param null $defaultValue
+     * @return mixed
+     */
+    protected function getParam($name, $defaultValue = null)
+    {
+        return $this->requestMethod == self::REQUEST_METHOD_GET ?
+            Yii::$app->request->getQueryParam($name, $defaultValue) :
+            Yii::$app->request->getBodyParam($name, $defaultValue);
     }
 
     /**
@@ -164,7 +183,7 @@ class DataTableAction extends Action
     /**
      * @param ActiveQuery $query
      * @param array $columns
-     * @return ActiveQuery
+     * @return array|ActiveRecord[]
      */
     public function formatData(ActiveQuery $query, $columns)
     {
@@ -177,7 +196,7 @@ class DataTableAction extends Action
 
     /**
      * @param array $response
-     * @return ActiveQuery
+     * @return array|ActiveRecord[]
      */
     public function formatResponse($response)
     {
