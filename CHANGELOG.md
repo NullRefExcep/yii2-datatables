@@ -14,3 +14,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## v1.0.2
 ### Fixed
 - Server-side pagination
+
+
+## v1.0.3
+### Added
+- Data and response formatting in DataTableAction
