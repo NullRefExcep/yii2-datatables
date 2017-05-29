@@ -28,7 +28,7 @@
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "~2.0",
-        "bower-asset/datatables.net": "~1.10",
+        "bower-asset/DataTables": "~1.10",
         "bower-asset/datatables.net-plugins": "~1.0"
     },
     "autoload": {
