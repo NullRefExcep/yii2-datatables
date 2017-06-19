@@ -28,8 +28,8 @@
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "~2.0",
-        "bower-asset/DataTables": "~1.10",
-        "bower-asset/datatables.net-plugins": "~1.0"
+        "bower-asset/datatables": "~1.10.15",
+        "bower-asset/datatables-plugins": "~1.10.15"
     },
     "autoload": {
         "psr-4": {"nullref\\datatable\\": "src/"}
