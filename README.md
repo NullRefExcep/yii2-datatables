@@ -71,6 +71,21 @@ Properties of `LinkColumn`:
 - `url` - will be passed to `Url::to()`;
 - `options` - HTML options of the `a` tag;
 - `queryParams` - array of params added to `url`
+- `render` - custom render js function. E.g:
+```php
+//config ...
+    'columns' => [
+        'id',
+        //...
+        [
+            'class' => 'nullref\datatable\LinkColumn',
+            'render' => new JsExpression('function render(data, type, row, meta ){
+                return "<a href=\"/custom/url/"+row["id"]+"\">View</a>"
+            }'),
+        ],
+    ],
+//...
+```
 
 ## Styling 
 
