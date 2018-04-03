@@ -11,7 +11,7 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\JsExpression;
 
-class LinkColumn extends \yii\base\baseObject
+class LinkColumn extends \yii\base\BaseObject
 {
     public $queryParams = [];
     public $url;

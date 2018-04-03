@@ -27,16 +27,20 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0",
-        "yiisoft/yii2": "~2.0",
+        "yiisoft/yii2": "~2.0.13",
         "bower-asset/datatables": "~1.10.15",
         "bower-asset/datatables-plugins": "~1.10.15"
     },
     "autoload": {
-        "psr-4": {"nullref\\datatable\\": "src/"}
+        "psr-4": {
+            "nullref\\datatable\\": "src/"
+        }
     },
-    "extra": {
-        "asset-installer-paths": {
-            "bower-asset-library": "vendor/bower"
+    "config": {
+        "fxp-asset": {
+            "installer-paths": {
+                "bower-asset-library": "vendor/bower"
+            }
         }
     }
 }
