@@ -96,6 +96,8 @@ class DataTable extends Widget
      */
     public $tableOptions = [];
 
+    public $withColumnFilter;
+
     public function init()
     {
         parent::init();
@@ -109,7 +111,33 @@ class DataTable extends Widget
         echo Html::beginTag('table', ArrayHelper::merge(['id' => $id], $this->tableOptions));
 
         echo Html::endTag('table');
-        $this->getView()->registerJs('jQuery("#' . $id . '").DataTable(' . Json::encode($this->getParams()) . ');');
+
+        if ($this->withColumnFilter) {
+	        $encodedParams = Json::encode($this->getParams());
+	        $this->getView()->registerJs(
+			        <<<JS
+{
+	var table =  jQuery("#${id}").DataTable(${encodedParams});
+	jQuery('#${id} thead tr').clone(true).appendTo( '#${id} thead' );
+	jQuery('#${id} thead tr:eq(1) th').each( function (i) {
+		var title = jQuery(this).text();
+		jQuery(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+		
+		jQuery( 'input', this ).on( 'keyup change', function () {
+			if ( table.column(i).search() !== this.value ) {
+				table
+					.column(i)
+					.search( this.value )
+					.draw();
+			}
+		} );
+	} );
+}
+JS
+	        );
+        } else {
+	        $this->getView()->registerJs('jQuery("#' . $id . '").DataTable(' . Json::encode($this->getParams()) . ');');
+        }
     }
 
     protected function getParams()
