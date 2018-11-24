@@ -14,6 +14,7 @@ use yii\base\InvalidConfigException;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\web\Response;
 
 /**
@@ -80,6 +81,31 @@ class DataTableAction extends Action
     {
         if ($this->query === null) {
             throw new InvalidConfigException(get_class($this) . '::$query must be set.');
+        }
+
+        if ($this->formatData === null) {
+            $this->formatData = function ($query, $columns) {
+                $rows = [];
+                foreach ($query->all() as $obj) {
+                    $row = [];
+                    foreach ($columns as $column) {
+                        $value = ArrayHelper::getValue($obj, $column['data'], null);
+                        if (($pos = strrpos($column['data'], '.')) !== false) {
+                            $keys = explode('.', $column['data']);
+                            $a = $value;
+                            foreach (array_reverse($keys) as $key) {
+                                $a = [ $key => $a ];
+                            }
+                            $row[$keys[0]] = $a[$keys[0]];
+                        } else {
+                            $row[$column['data']] = $value;
+                        }
+                    }
+                    $rows[] = $row;
+                }
+
+                return $rows;
+            };
         }
     }
 
@@ -187,11 +213,7 @@ class DataTableAction extends Action
      */
     public function formatData(ActiveQuery $query, $columns)
     {
-        if ($this->formatData !== null) {
-            return call_user_func($this->formatData, $query, $columns);
-        }
-
-        return $query->all();
+        return call_user_func($this->formatData, $query, $columns);
     }
 
     /**
