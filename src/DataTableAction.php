@@ -89,17 +89,20 @@ class DataTableAction extends Action
                 foreach ($query->all() as $obj) {
                     $row = [];
                     foreach ($columns as $column) {
-                        $value = ArrayHelper::getValue($obj, $column['data'], null);
-                        if (($pos = strrpos($column['data'], '.')) !== false) {
-                            $keys = explode('.', $column['data']);
-                            $a = $value;
-                            foreach (array_reverse($keys) as $key) {
-                                $a = [ $key => $a ];
-                            }
-                            $row[$keys[0]] = $a[$keys[0]];
-                        } else {
-                            $row[$column['data']] = $value;
-                        }
+                    	if ($column['data']) {
+		                    $value = ArrayHelper::getValue($obj, $column['data'], null);
+		                    $row[$column['data']] = $value;
+		                    if (($pos = strrpos($column['data'], '.')) !== false) {
+			                    $keys = explode('.', $column['data']);
+			                    $a = $value;
+			                    foreach (array_reverse($keys) as $key) {
+				                    $a = [$key => $a];
+			                    }
+			                    $row[$keys[0]] = $a[$keys[0]];
+		                    } else {
+			                    $row[$column['data']] = $value;
+		                    }
+	                    }
                     }
                     $rows[] = $row;
                 }

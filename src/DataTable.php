@@ -1,18 +1,18 @@
 <?php
 /**
  * @copyright Copyright (c) 2015 Serhiy Vinichuk
- * @license MIT
- * @author Serhiy Vinichuk <serhiyvinichuk@gmail.com>
+ * @license   MIT
+ * @author    Serhiy Vinichuk <serhiyvinichuk@gmail.com>
  */
 
 namespace nullref\datatable;
-
 
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Inflector;
 use yii\helpers\Json;
+use yii\web\JsExpression;
 
 /**
  * Class DataTable
@@ -95,7 +95,6 @@ class DataTable extends Widget
      * @var array Html options for table
      */
     public $tableOptions = [];
-
     public $withColumnFilter;
 
     public function init()
@@ -113,30 +112,47 @@ class DataTable extends Widget
         echo Html::endTag('table');
 
         if ($this->withColumnFilter) {
-	        $encodedParams = Json::encode($this->getParams());
-	        $this->getView()->registerJs(
-			        <<<JS
+            $encodedParams = Json::encode($this->getParams());
+
+            $js = "var table = jQuery('#${id}'').DataTable(${encodedParams});\n" .
+                "jQuery('#${id} thead tr').clone(true).appendTo( '#${id} thead' )";
+
+            $this->getView()->registerJs(
+                    <<<JS
 {
-	var table =  jQuery("#${id}").DataTable(${encodedParams});
-	jQuery('#${id} thead tr').clone(true).appendTo( '#${id} thead' );
-	jQuery('#${id} thead tr:eq(1) th').each( function (i) {
-		var title = jQuery(this).text();
-		jQuery(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-		
-		jQuery( 'input', this ).on( 'keyup change', function () {
-			if ( table.column(i).search() !== this.value ) {
-				table
-					.column(i)
-					.search( this.value )
-					.draw();
-			}
-		} );
-	} );
+    var params = ${encodedParams};
+    var table =  jQuery("#${id}").DataTable(params);
+    var filterRow = jQuery('<tr></tr>');
+    jQuery('#${id} thead tr th').each(function(i) {
+        console.log(i);
+        var cell = jQuery('<td></td>')
+            .attr('colspan', jQuery(this).attr('colspan'))
+            .attr('class', jQuery(this).attr('class'))
+            .attr('tabindex', jQuery(this).attr('tabindex'))
+            .attr('aria-controls', jQuery(this).attr('aria-controls'))
+            .removeClass('sorting sorting_disabled')
+            .appendTo(filterRow);
+
+        if (params.columns && params.columns[i] && params.columns[i].renderFilter) {
+            cell.html(jQuery.isFunction(params.columns[i].renderFilter) ? params.columns[i].renderFilter() : params.columns[i].renderFilter);
+        }
+    });
+    jQuery('#${id} thead').append(filterRow);
+    jQuery('#${id} thead tr:eq(1) td').each( function (i) {
+        jQuery(':input', this).on('keyup change', function () {
+            if (table.column(i).search() !== jQuery(this).val()) {
+                table
+                    .column(i)
+                    .search(jQuery(this).val())
+                    .draw();
+            }
+        } );
+    } );
 }
 JS
-	        );
+            );
         } else {
-	        $this->getView()->registerJs('jQuery("#' . $id . '").DataTable(' . Json::encode($this->getParams()) . ');');
+            $this->getView()->registerJs('jQuery("#' . $id . '").DataTable(' . Json::encode($this->getParams()) . ');');
         }
     }
 
@@ -149,17 +165,22 @@ JS
     {
         if (isset($this->_options['columns'])) {
             foreach ($this->_options['columns'] as $key => $value) {
-                if (is_string($value)) {
-                    $this->_options['columns'][$key] = ['data' => $value, 'title' => Inflector::camel2words($value)];
+                if (!is_array($value)) {
+                    $value = [
+                            'class' => DataTableColumn::class,
+                            'attribute' => $value,
+                            'label' => Inflector::camel2words($value)
+                    ];
                 }
                 if (isset($value['type'])) {
                     if ($value['type'] == 'link') {
                         $value['class'] = LinkColumn::className();
+                        unset($value['type']);
                     }
                 }
                 if (isset($value['class'])) {
                     $column = \Yii::createObject($value);
-                    $this->_options['columns'][$key] = $column;
+                    $this->_options['columns'][$key] = $column instanceof DataTableColumn ? $column->getDataTableConfig() : $column;
                 }
             }
         }
@@ -174,6 +195,5 @@ JS
     {
         return isset($this->_options[$name]) ? $this->_options[$name] : null;
     }
-
 
 }
