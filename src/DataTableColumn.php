@@ -1,18 +1,9 @@
 <?php
-/*
- * =============================================================================
- * This file is part of hguenot/base-app project.
- * =============================================================================
- * Copyright 2018 - Herve Guenot - https://github.com/hguenot
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- * =============================================================================
- * 
- * Date: 25/11/2018
- * Time: 07:37
+/**
+ * @copyright Copyright (c) 2018 Herve Guenot
+ * @license MIT
+ * @author Herve Guenot <hguenot@gmail.com>
  */
-
 namespace nullref\datatable;
 
 use yii\base\Widget;
@@ -23,32 +14,27 @@ use yii\web\JsExpression;
 class DataTableColumn extends Widget
 {
     /**
-     * @var string the attribute name associated with this column. When neither [[content]] nor [[value]]
-     * is specified, the value of the specified attribute will be retrieved from each data model and displayed.
-     *
-     * Also, if [[label]] is not specified, the label associated with the attribute will be displayed.
+     * @var string the attribute name associated with this column.
      */
-    public $attribute;
+    public $data;
+
     /**
-     * @var string label to be displayed in the [[header|header cell]] and also to be used as the sorting
-     * link label when sorting is enabled for this column.
-     * If it is not set and the models provided by the GridViews data provider are instances
-     * of [[\yii\db\ActiveRecord]], the label will be determined using [[\yii\db\ActiveRecord::getAttributeLabel()]].
-     * Otherwise [[\yii\helpers\Inflector::camel2words()]] will be used to get a label.
+     * @var string label to be displayed in the header.
+     * If it is not set [[\yii\helpers\Inflector::camel2words()]] will be used to get a label.
      */
-    public $label;
+    public $title;
+
     /**
-     * @var string|array|null|false the HTML code representing a filter input (e.g. a text field, a dropdown list)
-     * that is used for this data column. This property is effective only when [[GridView::filterModel]] is set.
+     * @var array|null|false Indicating if a filter will be displayed or not.
      *
      * - If this property is not set, a text field will be generated as the filter input with attributes defined
-     *   with [[filterInputOptions]]. See [[\yii\helpers\BaseHtml::activeInput]] for details on how an active
-     *   input tag is generated.
+     *   with [[filterInputOptions]].
      * - If this property is an array, a dropdown list will be generated that uses this property value as
      *   the list options.
      * - If you don't want a filter for this data column, set this value to be false.
      */
-    public $filter;
+    private $filter;
+
     /**
      * @var array the HTML attributes for the filter input fields. This property is used in combination with
      * the [[filter]] property. When [[filter]] is not set or is an array, this property will be used to
@@ -61,15 +47,65 @@ class DataTableColumn extends Widget
      */
     public $filterInputOptions = ['class' => 'form-control', 'id' => null];
 
-    public function getDataTableConfig()
-    {
-        return [
-                'data' => $this->attribute,
-                'title' => $this->label ?? Inflector::camel2words($this->attribute),
-                'renderFilter' => $this->getJsFilter(),
-                'render' => $this->getJsRender(),
-        ];
+    /** @var JsExpression Javascript (function or expression) used to display the filter */
+    public $renderFilter;
+
+	/** @var JsExpression Javascript (function) used to display the value. */
+    public $render;
+
+    public function init() {
+        parent::init();
+
+        if ($this->data === null) {
+            throw new InvalidConfigException(get_class($this) . '::$data must be set.');
+        }
+
+        if ($this->title === null) {
+            $this->title = Inflector::camel2words($this->attribute);
+        }
+
+        if ($this->render === null) {
+            $this->render= $this->getJsRender();
+        }
+
+        if ($this->renderFilter === null) {
+            $this->renderFilter =  $this->getJsFilter();
+        }
     }
+
+    public function setAttribute($attribute)
+    {
+        $this->data = $attribute;
+    }
+
+    public function getAttribute()
+    {
+        return $this->data;
+    }
+
+    public function setLabel($label)
+    {
+        $this->title = $label;
+    }
+
+    public function getLabel()
+    {
+        return $this->title;
+    }
+
+	/**
+	 * @return array|false|null
+	 */
+	public function getFilter() {
+		return $this->filter;
+	}
+
+	/**
+	 * @param array|false|null $filter
+	 */
+	public function setFilter($filter): void {
+		$this->filter = $filter;
+	}
 
     public function getJsFilter()
     {
@@ -90,7 +126,7 @@ class DataTableColumn extends Widget
             }
 
             return new JsExpression("function() { return {$select}; }");
-        } else {
+        } else if ($this->filter !== false) {
             return new JsExpression(
                     "function() {" .
                     "return jQuery('<input type=\"text\" placeholder=\"Search {$jsTitle}\" />')\n" .
@@ -99,6 +135,8 @@ class DataTableColumn extends Widget
                     "\t.attr('id', '{$jsId}');\n" .
                     "}"
             );
+        } else {
+	        return new JsExpression('jQuery()');
         }
     }
 
@@ -118,9 +156,9 @@ class DataTableColumn extends Widget
             $select .= "\n\tdefault: return data;";
             $select .= "\n}";
 
-            return new JsExpression("function render( data, type, row, meta ) { {$select} }");
+            return new JsExpression("function render(data, type, row, meta) { {$select} }");
         } else {
-            return new JsExpression("function render( data, type, row, meta ){ console.log(arguments); return data; }");
+            return new JsExpression("function render(data, type, row, meta){ return data; }");
         }
     }
 

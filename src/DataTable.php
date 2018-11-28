@@ -1,8 +1,8 @@
 <?php
 /**
  * @copyright Copyright (c) 2015 Serhiy Vinichuk
- * @license   MIT
- * @author    Serhiy Vinichuk <serhiyvinichuk@gmail.com>
+ * @license MIT
+ * @author Serhiy Vinichuk <serhiyvinichuk@gmail.com>
  */
 
 namespace nullref\datatable;
@@ -38,7 +38,7 @@ use yii\web\JsExpression;
  * @property array $columnDefs Set column definition initialisation properties.
  * @property array $columns Set column specific initialisation properties.
  * @property bool|int|array $deferLoading Delay the loading of server-side data until second draw
- * @property bool $destroy Destroy any existing table matching the selector and replace with the new options.
+ * @propert bool $destroy Destroy any existing table matching the selector and replace with the new options.
  * @property int $displayStart Initial paging start point
  * @property string $dom Define the table control elements to appear on the page and in what order
  * @property array $lengthMenu Change the options in the page length `select` list.
@@ -123,7 +123,8 @@ class DataTable extends Widget
     var params = ${encodedParams};
     var table =  jQuery("#${id}").DataTable(params);
     var filterRow = jQuery('<tr></tr>');
-    jQuery('#${id} thead tr th').each(function(i) {
+    jQuery('#${id} thead tr th').each(function(i) 
+    {
         console.log(i);
         var cell = jQuery('<td></td>')
             .attr('colspan', jQuery(this).attr('colspan'))
@@ -138,7 +139,8 @@ class DataTable extends Widget
         }
     });
     jQuery('#${id} thead').append(filterRow);
-    jQuery('#${id} thead tr:eq(1) td').each( function (i) {
+    jQuery('#${id} thead tr:eq(1) td').each( function (i) 
+    {
         jQuery(':input', this).on('keyup change', function () {
             if (table.column(i).search() !== jQuery(this).val()) {
                 table
@@ -178,9 +180,12 @@ JS
                         unset($value['type']);
                     }
                 }
+                if (!isset($value['class'])) {
+                    $value['class'] = DataTableColumn::className();
+                }
                 if (isset($value['class'])) {
                     $column = \Yii::createObject($value);
-                    $this->_options['columns'][$key] = $column instanceof DataTableColumn ? $column->getDataTableConfig() : $column;
+                    $this->_options['columns'][$key] = $column;
                 }
             }
         }

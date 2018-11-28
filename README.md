@@ -45,7 +45,22 @@ To pass them as widget options:
         'name',
         'email'
     ],
+    'withColumnFilter' => true
 ]) ?>
+```
+
+## Specifies header label
+
+```php
+    <?= \nullref\datatable\DataTable::widget([
+        'columns' => [
+            //other columns
+            [
+                'data' => 'active',
+                'title' => 'Is active',
+            ],
+        ],
+    ]) ?>
 ```
 
 ## Add Links to row
@@ -85,6 +100,62 @@ Properties of `LinkColumn`:
         ],
     ],
 //...
+```
+
+## Column filtering
+
+You ca add column filtering functionality by setting option `withColumnFilter` to `true` :
+
+- By default it generates a text field as filter input. 
+- It can be replaced by a combo box using `filter` parameter when defining column. It should be a associative array 
+  where key is used as filter (value sent to server) and value for cell rendering
+- It can be avoided by setting `filter` to false
+
+```php
+    <?= \nullref\datatable\DataTable::widget([
+        'columns' => [
+            'id',
+            //...
+            [
+                'data' => 'active',
+                'title' => \Yii::t('app', 'Is active'),
+                'filter' => [ 'true' => 'Yes', 'false' => 'No' ]
+            ],
+            [
+                'data' => 'last_connection',
+                'filter' => false
+            ],
+        ],
+    ]) ?>
+//...
+```
+
+In this example above, filter for `active` field sent to server will contains `'true'` or `'false'` but the cell content 
+will be `'Yes'` or `'No'` and the filter will be rendered as a combo box.
+
+No filter will be generated for `last_connection` attrribute.
+
+## Advanced column definition
+
+Cell rendering or filter can be customized using `\nullref\datatable\DataTableColumn` class.
+
+```php
+    <?= \nullref\datatable\DataTable::widget([
+        'columns' => [
+            //other columns
+            [
+                'class' => 'nullref\datatable\DataTableColumn', // can be omitted
+                'data' => 'active',
+                'renderFiler' => new \yii\web\JsExpression('function() { ' .
+                    'return jQuery(\'<input type="checkbox" value="true"/> Active only\'); ' .
+                '}'),
+                'render' => new \yii\web\JsExpression('function(data, type, row, meta) { ' .
+                    'return jQuery(\'<input type="checkbox" value="true" disabled/>\')' .
+                    '    .prop(\'checked\', data == \'true\'); ' .
+                    '}'),
+            ],
+        ],
+    ]) ?>
 ```
 
 ## Styling 
