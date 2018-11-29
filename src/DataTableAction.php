@@ -91,7 +91,6 @@ class DataTableAction extends Action
                     foreach ($columns as $column) {
                     	if ($column['data']) {
 		                    $value = ArrayHelper::getValue($obj, $column['data'], null);
-		                    $row[$column['data']] = $value;
 		                    if (($pos = strrpos($column['data'], '.')) !== false) {
 			                    $keys = explode('.', $column['data']);
 			                    $a = $value;

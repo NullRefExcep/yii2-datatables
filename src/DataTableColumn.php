@@ -122,10 +122,13 @@ class DataTableColumn extends Widget
             foreach ($this->filter as $key => $value) {
                 $key = Html::encode($key);
                 $value = Html::encode($value);
-                $select .= "\n\t.append(jQuery('<option value=\"{$key}\">{$value}</option>'))";
+                $select .= "\n\t.append(jQuery('<option></option>', {\n\t\t"
+	                . "'value': serverSide ? '{$key}' : '{$value}',\n\t\t"
+	                . "'text': '{$value}'\n\t"
+	                . "}))";
             }
 
-            return new JsExpression("function() { return {$select}; }");
+            return new JsExpression("function(table) { var serverSide = table.page.info().serverSide; return {$select}; }");
         } else if ($this->filter !== false) {
             return new JsExpression(
                     "function() {" .

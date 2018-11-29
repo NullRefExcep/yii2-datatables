@@ -102,6 +102,7 @@ class DataTable extends Widget
         parent::init();
         DataTableAsset::register($this->getView());
         $this->initColumns();
+        $this->initData();
     }
 
     public function run()
@@ -125,7 +126,6 @@ class DataTable extends Widget
     var filterRow = jQuery('<tr></tr>');
     jQuery('#${id} thead tr th').each(function(i) 
     {
-        console.log(i);
         var cell = jQuery('<td></td>')
             .attr('colspan', jQuery(this).attr('colspan'))
             .attr('class', jQuery(this).attr('class'))
@@ -135,7 +135,7 @@ class DataTable extends Widget
             .appendTo(filterRow);
 
         if (params.columns && params.columns[i] && params.columns[i].renderFilter) {
-            cell.html(jQuery.isFunction(params.columns[i].renderFilter) ? params.columns[i].renderFilter() : params.columns[i].renderFilter);
+            cell.html(jQuery.isFunction(params.columns[i].renderFilter) ? params.columns[i].renderFilter(table) : params.columns[i].renderFilter);
         }
     });
     jQuery('#${id} thead').append(filterRow);
@@ -189,6 +189,35 @@ JS
                 }
             }
         }
+
+    }
+
+    private function initData() {
+    	if (array_key_exists('data', $this->_options)) {
+    		$data = [];
+
+    		foreach ($this->_options['data'] as $obj) {
+			    $row = [];
+			    foreach ($this->_options['columns'] as $column) {
+				    if ($column instanceof DataTableColumn) {
+					    $value = ArrayHelper::getValue($obj, $column->data);
+					    if (($pos = strrpos($column->data, '.')) !== false) {
+						    $keys = explode('.', $column->data);
+						    $a = $value;
+						    foreach (array_reverse($keys) as $key) {
+							    $a = [$key => $a];
+						    }
+						    $row[$keys[0]] = $a[$keys[0]];
+					    } else {
+						    $row[$column->data] = $value;
+					    }
+				    }
+			    }
+			    if ($row)
+				    $data[] = $row;
+		    }
+		    $this->_options['data'] = $data;
+	    }
     }
 
     public function __set($name, $value)
