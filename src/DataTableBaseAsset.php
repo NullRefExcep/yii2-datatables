@@ -10,7 +10,7 @@ namespace nullref\datatable;
 
 use yii\web\AssetBundle;
 
-class DataTableAsset extends AssetBundle
+class DataTableBaseAsset extends AssetBundle
 {
     const STYLING_DEFAULT = 'default';
     const STYLING_BOOTSTRAP = 'bootstrap';
@@ -18,6 +18,7 @@ class DataTableAsset extends AssetBundle
 
     public $styling = self::STYLING_DEFAULT;
     public $fontAwesome = false;
+    public $sourcePath = '@bower/datatables/media';
 
     public $depends = [
         'yii\web\JqueryAsset',
@@ -26,22 +27,11 @@ class DataTableAsset extends AssetBundle
     public function init()
     {
         parent::init();
-
-        switch ($this->styling) {
-            case self::STYLING_JUI:
-                $this->depends[] = DataTableJuiAsset::class;
-                break;
-            case self::STYLING_BOOTSTRAP:
-                $this->depends[] = DataTableBootstrapAsset::class;
-                break;
-            case self::STYLING_DEFAULT:
-                $this->depends[] = DataTableBaseAsset::class;
-                break;
-            default;
-        }
+        $this->js[] = 'js/jquery.dataTables' . (YII_ENV_DEV ? '' : '.min') . '.js';
+	    $this->css[] = 'css/jquery.dataTables' . (YII_ENV_DEV ? '' : '.min') . '.css';
 
         if ($this->fontAwesome) {
-            $this->depends[] = DataTableFaAsset::class;
+            $this->css[] = 'dataTables.fontAwesome.css';
         }
     }
 

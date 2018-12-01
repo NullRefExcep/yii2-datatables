@@ -7,12 +7,12 @@
 
 namespace nullref\datatable;
 
-
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Inflector;
 use yii\helpers\Json;
+use yii\web\JsExpression;
 
 /**
  * Class DataTable
@@ -38,7 +38,7 @@ use yii\helpers\Json;
  * @property array $columnDefs Set column definition initialisation properties.
  * @property array $columns Set column specific initialisation properties.
  * @property bool|int|array $deferLoading Delay the loading of server-side data until second draw
- * @property bool $destroy Destroy any existing table matching the selector and replace with the new options.
+ * @propert bool $destroy Destroy any existing table matching the selector and replace with the new options.
  * @property int $displayStart Initial paging start point
  * @property string $dom Define the table control elements to appear on the page and in what order
  * @property array $lengthMenu Change the options in the page length `select` list.
@@ -95,12 +95,14 @@ class DataTable extends Widget
      * @var array Html options for table
      */
     public $tableOptions = [];
+    public $withColumnFilter;
 
     public function init()
     {
         parent::init();
         DataTableAsset::register($this->getView());
         $this->initColumns();
+        $this->initData();
     }
 
     public function run()
@@ -109,7 +111,51 @@ class DataTable extends Widget
         echo Html::beginTag('table', ArrayHelper::merge(['id' => $id], $this->tableOptions));
 
         echo Html::endTag('table');
-        $this->getView()->registerJs('jQuery("#' . $id . '").DataTable(' . Json::encode($this->getParams()) . ');');
+
+        if ($this->withColumnFilter) {
+            $encodedParams = Json::encode($this->getParams());
+
+            $js = "var table = jQuery('#${id}'').DataTable(${encodedParams});\n" .
+                "jQuery('#${id} thead tr').clone(true).appendTo( '#${id} thead' )";
+
+            $this->getView()->registerJs(
+                    <<<JS
+{
+    var params = ${encodedParams};
+    var table =  jQuery("#${id}").DataTable(params);
+    var filterRow = jQuery('<tr></tr>');
+    jQuery('#${id} thead tr th').each(function(i) 
+    {
+        var cell = jQuery('<td></td>')
+            .attr('colspan', jQuery(this).attr('colspan'))
+            .attr('class', jQuery(this).attr('class'))
+            .attr('tabindex', jQuery(this).attr('tabindex'))
+            .attr('aria-controls', jQuery(this).attr('aria-controls'))
+            .removeClass('sorting sorting_disabled')
+            .appendTo(filterRow);
+
+        if (params.columns && params.columns[i] && params.columns[i].renderFilter) {
+            cell.html(jQuery.isFunction(params.columns[i].renderFilter) ? params.columns[i].renderFilter(table) : params.columns[i].renderFilter);
+        }
+    });
+    jQuery('#${id} thead').append(filterRow);
+    jQuery('#${id} thead tr:eq(1) td').each( function (i) 
+    {
+        jQuery(':input', this).on('keyup change', function () {
+            if (table.column(i).search() !== jQuery(this).val()) {
+                table
+                    .column(i)
+                    .search(jQuery(this).val())
+                    .draw();
+            }
+        } );
+    } );
+}
+JS
+            );
+        } else {
+            $this->getView()->registerJs('jQuery("#' . $id . '").DataTable(' . Json::encode($this->getParams()) . ');');
+        }
     }
 
     protected function getParams()
@@ -121,13 +167,21 @@ class DataTable extends Widget
     {
         if (isset($this->_options['columns'])) {
             foreach ($this->_options['columns'] as $key => $value) {
-                if (is_string($value)) {
-                    $this->_options['columns'][$key] = ['data' => $value, 'title' => Inflector::camel2words($value)];
+                if (!is_array($value)) {
+                    $value = [
+                            'class' => DataTableColumn::class,
+                            'attribute' => $value,
+                            'label' => Inflector::camel2words($value)
+                    ];
                 }
                 if (isset($value['type'])) {
                     if ($value['type'] == 'link') {
                         $value['class'] = LinkColumn::className();
+                        unset($value['type']);
                     }
+                }
+                if (!isset($value['class'])) {
+                    $value['class'] = DataTableColumn::className();
                 }
                 if (isset($value['class'])) {
                     $column = \Yii::createObject($value);
@@ -135,6 +189,35 @@ class DataTable extends Widget
                 }
             }
         }
+
+    }
+
+    private function initData() {
+    	if (array_key_exists('data', $this->_options)) {
+    		$data = [];
+
+    		foreach ($this->_options['data'] as $obj) {
+			    $row = [];
+			    foreach ($this->_options['columns'] as $column) {
+				    if ($column instanceof DataTableColumn) {
+					    $value = ArrayHelper::getValue($obj, $column->data);
+					    if (($pos = strrpos($column->data, '.')) !== false) {
+						    $keys = explode('.', $column->data);
+						    $a = $value;
+						    foreach (array_reverse($keys) as $key) {
+							    $a = [$key => $a];
+						    }
+						    $row[$keys[0]] = $a[$keys[0]];
+					    } else {
+						    $row[$column->data] = $value;
+					    }
+				    }
+			    }
+			    if ($row)
+				    $data[] = $row;
+		    }
+		    $this->_options['data'] = $data;
+	    }
     }
 
     public function __set($name, $value)
@@ -146,6 +229,5 @@ class DataTable extends Widget
     {
         return isset($this->_options[$name]) ? $this->_options[$name] : null;
     }
-
 
 }
