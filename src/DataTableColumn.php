@@ -6,12 +6,12 @@
  */
 namespace nullref\datatable;
 
-use yii\base\Widget;
+use yii\base\BaseObject;
 use yii\helpers\Html;
 use yii\helpers\Inflector;
 use yii\web\JsExpression;
 
-class DataTableColumn extends Widget
+class DataTableColumn extends BaseObject
 {
     /**
      * @var string the attribute name associated with this column.
