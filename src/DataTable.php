@@ -97,6 +97,9 @@ class DataTable extends Widget
     public $tableOptions = [];
     public $withColumnFilter;
 
+    /** @var bool  */
+    public $globalVariable = false;
+
     public function init()
     {
         parent::init();
@@ -112,17 +115,16 @@ class DataTable extends Widget
 
         echo Html::endTag('table');
 
+        $globalVariable = $this->globalVariable ? "window[$id] =" : '';
         if ($this->withColumnFilter) {
             $encodedParams = Json::encode($this->getParams());
-
-            $js = "var table = jQuery('#${id}'').DataTable(${encodedParams});\n" .
-                "jQuery('#${id} thead tr').clone(true).appendTo( '#${id} thead' )";
 
             $this->getView()->registerJs(
                     <<<JS
 {
     var params = ${encodedParams};
-    var table =  jQuery("#${id}").DataTable(params);
+    var table;
+    ${globalVariable} table = jQuery("#${id}").DataTable(params);
     var filterRow = jQuery('<tr></tr>');
     jQuery('#${id} thead tr th').each(function(i) 
     {
@@ -154,7 +156,7 @@ class DataTable extends Widget
 JS
             );
         } else {
-            $this->getView()->registerJs('jQuery("#' . $id . '").DataTable(' . Json::encode($this->getParams()) . ');');
+            $this->getView()->registerJs($globalVariable . 'jQuery("#' . $id . '").DataTable(' . Json::encode($this->getParams()) . ');');
         }
     }
 
