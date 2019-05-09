@@ -171,6 +171,25 @@ Cell rendering or filter can be customized using `\nullref\datatable\DataTableCo
     ],
 ],
 ```
+
+### Bootstrap
+
+Bootstrap tables require the class 'table', so you'll need to add the 'table' class using `tableOptions` via the widget config.
+
+```php
+<?= \nullref\datatable\DataTable::widget([
+    'data' => $dataProvider->getModels(),
+    'tableOptions' => [
+        'class' => 'table',
+    ],
+    'columns' => [
+        'id',
+        'name',
+        'email'
+    ],
+]) ?>
+```
+
 ## Custom assets
 It's posible to use custom styles and scripts:
 ```php
