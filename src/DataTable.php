@@ -87,18 +87,16 @@ class DataTable extends Widget
     const PAGING_SIMPLE_NUMBERS = 'simple_numbers';
     const PAGING_FULL = 'full';
     const PAGING_FULL_NUMBERS = 'full_numbers';
-
-    protected $_options = [];
-
     public $id;
     /**
      * @var array Html options for table
      */
     public $tableOptions = [];
     public $withColumnFilter;
-
-    /** @var bool  */
+    /** @var bool */
     public $globalVariable = false;
+    protected $_options = [];
+    protected $_hiddenColumns = [];
 
     public function init()
     {
@@ -106,6 +104,72 @@ class DataTable extends Widget
         DataTableAsset::register($this->getView());
         $this->initColumns();
         $this->initData();
+    }
+
+    protected function initColumns()
+    {
+        if (isset($this->_options['columns'])) {
+            foreach ($this->_options['columns'] as $key => $value) {
+                if (!is_array($value)) {
+                    $value = [
+                        'class' => DataTableColumn::class,
+                        'attribute' => $value,
+                        'label' => Inflector::camel2words($value)
+                    ];
+                }
+                if (isset($value['type'])) {
+                    if ($value['type'] == 'link') {
+                        $value['class'] = LinkColumn::className();
+                        unset($value['type']);
+                    }
+                }
+                if (!isset($value['class'])) {
+                    $value['class'] = DataTableColumn::className();
+                }
+                if (isset($value['class'])) {
+                    $column = \Yii::createObject($value);
+                    if ($column instanceof LinkColumn) {
+                        $this->_hiddenColumns = array_merge($this->_hiddenColumns, $column->queryParams);
+                    }
+                    $this->_options['columns'][$key] = $column;
+                }
+            }
+        }
+
+    }
+
+    private function initData()
+    {
+        $this->_hiddenColumns = array_unique($this->_hiddenColumns);
+        if (array_key_exists('data', $this->_options)) {
+            $data = [];
+
+            foreach ($this->_options['data'] as $obj) {
+                $row = [];
+                foreach ($this->_options['columns'] as $column) {
+                    if ($column instanceof DataTableColumn) {
+                        $value = ArrayHelper::getValue($obj, $column->data);
+                        if (($pos = strrpos($column->data, '.')) !== false) {
+                            $keys = explode('.', $column->data);
+                            $a = $value;
+                            foreach (array_reverse($keys) as $key) {
+                                $a = [$key => $a];
+                            }
+                            $row[$keys[0]] = $a[$keys[0]];
+                        } else {
+                            $row[$column->data] = $value;
+                        }
+                    }
+                }
+                foreach ($this->_hiddenColumns as $column) {
+                    $row[$column] = ArrayHelper::getValue($obj, $column);
+                }
+                if ($row) {
+                    $data[] = $row;
+                }
+            }
+            $this->_options['data'] = $data;
+        }
     }
 
     public function run()
@@ -120,7 +184,7 @@ class DataTable extends Widget
             $encodedParams = Json::encode($this->getParams());
 
             $this->getView()->registerJs(
-                    <<<JS
+                <<<JS
 {
     var params = ${encodedParams};
     var table;
@@ -165,71 +229,14 @@ JS
         return $this->_options;
     }
 
-    protected function initColumns()
+    public function __get($name)
     {
-        if (isset($this->_options['columns'])) {
-            foreach ($this->_options['columns'] as $key => $value) {
-                if (!is_array($value)) {
-                    $value = [
-                            'class' => DataTableColumn::class,
-                            'attribute' => $value,
-                            'label' => Inflector::camel2words($value)
-                    ];
-                }
-                if (isset($value['type'])) {
-                    if ($value['type'] == 'link') {
-                        $value['class'] = LinkColumn::className();
-                        unset($value['type']);
-                    }
-                }
-                if (!isset($value['class'])) {
-                    $value['class'] = DataTableColumn::className();
-                }
-                if (isset($value['class'])) {
-                    $column = \Yii::createObject($value);
-                    $this->_options['columns'][$key] = $column;
-                }
-            }
-        }
-
-    }
-
-    private function initData() {
-    	if (array_key_exists('data', $this->_options)) {
-    		$data = [];
-
-    		foreach ($this->_options['data'] as $obj) {
-			    $row = [];
-			    foreach ($this->_options['columns'] as $column) {
-				    if ($column instanceof DataTableColumn) {
-					    $value = ArrayHelper::getValue($obj, $column->data);
-					    if (($pos = strrpos($column->data, '.')) !== false) {
-						    $keys = explode('.', $column->data);
-						    $a = $value;
-						    foreach (array_reverse($keys) as $key) {
-							    $a = [$key => $a];
-						    }
-						    $row[$keys[0]] = $a[$keys[0]];
-					    } else {
-						    $row[$column->data] = $value;
-					    }
-				    }
-			    }
-			    if ($row)
-				    $data[] = $row;
-		    }
-		    $this->_options['data'] = $data;
-	    }
+        return isset($this->_options[$name]) ? $this->_options[$name] : null;
     }
 
     public function __set($name, $value)
     {
         return $this->_options[$name] = $value;
-    }
-
-    public function __get($name)
-    {
-        return isset($this->_options[$name]) ? $this->_options[$name] : null;
     }
 
 }

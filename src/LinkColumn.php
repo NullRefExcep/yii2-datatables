@@ -13,20 +13,17 @@ use yii\web\JsExpression;
 
 class LinkColumn extends \yii\base\BaseObject
 {
-    public $queryParams = [];
+    public $queryParams = ['id'];
     public $url;
     public $label;
     public $options = [];
     public $data = null;
     public $render;
-    public $searchable;
-    public $orderable;
+    public $searchable = false;
+    public $orderable = false;
 
     public function init()
     {
-        $this->searchable = false;
-        $this->orderable = false;
-
         if (empty($this->options['id'])) {
             $this->options['id'] = 'link';
         }
@@ -41,6 +38,4 @@ class LinkColumn extends \yii\base\BaseObject
             return link.get()[0].outerHTML;}');
         }
     }
-
-
-} 
+}

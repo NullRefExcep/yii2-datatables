@@ -73,7 +73,6 @@ To pass them as widget options:
                 'class' => 'nullref\datatable\LinkColumn',
                 'url' => ['/model/delete'],
                 'options' => ['data-confirm' => 'Are you sure you want to delete this item?', 'data-method' => 'post'],
-                'queryParams' => ['id'],
                 'label' => 'Delete',
             ],
         ],
@@ -90,17 +89,19 @@ Properties of `LinkColumn`:
 ```php
 //config ...
     'columns' => [
-        'id',
         //...
         [
             'class' => 'nullref\datatable\LinkColumn',
+            'queryParams' => ['some_id'],
             'render' => new JsExpression('function render(data, type, row, meta ){
-                return "<a href=\"/custom/url/"+row["id"]+"\">View</a>"
+                return "<a href=\"/custom/url/"+row["some_id"]+"\">View</a>"
             }'),
         ],
     ],
 //...
 ```
+
+You should pass fields that are using at render function to `queryParams` property
 
 ## Column filtering
 
@@ -236,10 +237,22 @@ public function actions()
              'query' => Model::find(),
              'applyOrder' => function($query, $columns, $order) {
                 //custom ordering logic
-                return $query;
+                $orderBy = [];
+                foreach ($order as $orderItem) {
+                    $orderBy[$columns[$orderItem['column']]['data']] = $orderItem['dir'] == 'asc' ? SORT_ASC : SORT_DESC;
+                }
+                return $query->orderBy($orderBy);
              },
              'applyFilter' => function($query, $columns, $search) {
                 //custom search logic
+                $modelClass = $query->modelClass;
+                $schema = $modelClass::getTableSchema()->columns;
+                foreach ($columns as $column) {
+                    if ($column['searchable'] == 'true' && array_key_exists($column['data'], $schema) !== false) {
+                        $value = empty($search['value']) ? $column['search']['value'] : $search['value'];
+                        $query->orFilterWhere(['like', $column['data'], $value]);
+                    }
+                }
                 return $query;
              },
          ],
