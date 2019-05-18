@@ -24,6 +24,7 @@ class DataTableColumn extends Widget
      * If it is not set [[\yii\helpers\Inflector::camel2words()]] will be used to get a label.
      */
     public $title;
+
     /**
      * @var array the HTML attributes for the filter input fields. This property is used in combination with
      * the [[filter]] property. When [[filter]] is not set or is an array, this property will be used to
@@ -35,10 +36,16 @@ class DataTableColumn extends Widget
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
      */
     public $filterInputOptions = ['class' => 'form-control', 'id' => null];
+
     /** @var JsExpression Javascript (function or expression) used to display the filter */
     public $renderFilter;
+
     /** @var JsExpression Javascript (function) used to display the value. */
     public $render;
+
+    /** @var string CSS class for column cell */
+    public $sClass = '';
+
     /**
      * @var array|null|false Indicating if a filter will be displayed or not.
      *
@@ -50,6 +57,9 @@ class DataTableColumn extends Widget
      */
     private $filter;
 
+    /**
+     * Check if all required properties is set
+     */
     public function init()
     {
         parent::init();
@@ -71,11 +81,11 @@ class DataTableColumn extends Widget
         }
     }
 
+    /**
+     * @return JsExpression
+     */
     public function getJsRender()
     {
-        $jsTitle = Html::encode($this->label);
-        $jsClass = Html::encode($this->filterInputOptions['class']);
-        $jsId = $this->filterInputOptions['id'] ? Html::encode($this->filterInputOptions['id']) : $this->getId();
         if (is_array($this->filter)) {
             $select = "switch (data) {";
 
@@ -93,6 +103,9 @@ class DataTableColumn extends Widget
         }
     }
 
+    /**
+     * @return JsExpression
+     */
     public function getJsFilter()
     {
         $jsTitle = Html::encode($this->label);
@@ -160,7 +173,7 @@ class DataTableColumn extends Widget
     /**
      * @param array|false|null $filter
      */
-    public function setFilter($filter): void
+    public function setFilter($filter)
     {
         $this->filter = $filter;
     }

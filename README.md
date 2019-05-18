@@ -45,11 +45,11 @@ To pass them as widget options:
         'name',
         'email'
     ],
-    'withColumnFilter' => true
+    'withColumnFilter' => true,
 ]) ?>
 ```
 
-## Specifies header label
+## Specifies header label and css class for cell
 
 ```php
     <?= \nullref\datatable\DataTable::widget([
@@ -58,6 +58,7 @@ To pass them as widget options:
             [
                 'data' => 'active',
                 'title' => 'Is active',
+                'sClass' => 'active-cell-css-class',
             ],
         ],
     ]) ?>
@@ -72,7 +73,7 @@ To pass them as widget options:
             [
                 'class' => 'nullref\datatable\LinkColumn',
                 'url' => ['/model/delete'],
-                'options' => ['data-confirm' => 'Are you sure you want to delete this item?', 'data-method' => 'post'],
+                'linkOptions' => ['data-confirm' => 'Are you sure you want to delete this item?', 'data-method' => 'post'],
                 'label' => 'Delete',
             ],
         ],
@@ -84,7 +85,7 @@ Properties of `LinkColumn`:
 - `label` - text placed in `a` tag;
 - `title` - header title of column;
 - `url` - will be passed to `Url::to()`;
-- `options` - HTML options of the `a` tag;
+- `linkOptions` - HTML options of the `a` tag;
 - `queryParams` - array of params added to `url`, `['id']` by default;
 - `render` - custom render js function. E.g:
 ```php
@@ -121,11 +122,11 @@ You ca add column filtering functionality by setting option `withColumnFilter` t
             [
                 'data' => 'active',
                 'title' => \Yii::t('app', 'Is active'),
-                'filter' => [ 'true' => 'Yes', 'false' => 'No' ]
+                'filter' => ['true' => 'Yes', 'false' => 'No'],
             ],
             [
                 'data' => 'last_connection',
-                'filter' => false
+                'filter' => false,
             ],
         ],
     ]) ?>
@@ -167,8 +168,8 @@ Cell rendering or filter can be customized using `\nullref\datatable\DataTableCo
 ```php
 'assetManager' => [
     'bundles' => [
-        'nullref\datatable\DataTableAsset' => [
-            'styling' => \nullref\datatable\DataTableAsset::STYLING_BOOTSTRAP,
+        'nullref\datatable\assets\DataTableAsset' => [
+            'styling' => \nullref\datatable\assets\DataTableAsset::STYLING_BOOTSTRAP,
         ]
     ],
 ],
@@ -187,15 +188,15 @@ Bootstrap tables require the class 'table', so you'll need to add the 'table' cl
     'columns' => [
         'id',
         'name',
-        'email'
+        'email',
     ],
 ]) ?>
 ```
 
 ## Custom assets
-It's posible to use custom styles and scripts:
+It's possible to use custom styles and scripts:
 ```php
-'nullref\datatable\DataTableAsset' => [
+'nullref\datatable\assets\DataTableAsset' => [
     'sourcePath' => '@webroot/js/plugin/datatables/',
     'js' => [
         'jquery.dataTables-1.10-cust.js',

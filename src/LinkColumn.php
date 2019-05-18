@@ -11,29 +11,26 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\JsExpression;
 
-class LinkColumn extends \yii\base\BaseObject
+class LinkColumn extends DataTableColumn
 {
     public $queryParams = ['id'];
     public $url;
-    public $title;
     public $label;
-    public $options = [];
-    public $data = null;
-    public $render;
+    public $linkOptions = [];
     public $searchable = false;
     public $orderable = false;
 
     public function init()
     {
-        if (empty($this->options['id'])) {
-            $this->options['id'] = 'link';
+        if (empty($this->linkOptions['id'])) {
+            $this->linkOptions['id'] = 'link';
         }
 
         if (!isset($this->render)) {
             $this->render = new JsExpression('function render(data, type, row, meta){
             var p = ' . Json::encode($this->queryParams) . ';
             var q = {};for (var i = 0; i < p.length; i++) {q[p[i]] = row[p[i]];}
-            var link = jQuery(\'' . Html::a($this->label, $this->url, $this->options) . '\');
+            var link = jQuery(\'' . Html::a($this->label, $this->url, $this->linkOptions) . '\');
             var paramPrefix = ((link.attr("href").indexOf("?") < 0) ? "?" : "&");
             link.attr("id", link.attr("id") + meta.row);link.attr("href", link.attr("href") + paramPrefix + jQuery.param(q));
             return link.get()[0].outerHTML;}');

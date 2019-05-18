@@ -7,6 +7,7 @@
 
 namespace nullref\datatable;
 
+use nullref\datatable\assets\DataTableAsset;
 use yii\base\Widget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
