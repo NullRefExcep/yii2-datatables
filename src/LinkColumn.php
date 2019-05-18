@@ -15,6 +15,7 @@ class LinkColumn extends \yii\base\BaseObject
 {
     public $queryParams = ['id'];
     public $url;
+    public $title;
     public $label;
     public $options = [];
     public $data = null;
