@@ -82,9 +82,10 @@ To pass them as widget options:
 Properties of `LinkColumn`: 
 
 - `label` - text placed in `a` tag;
+- `title` - header title of column;
 - `url` - will be passed to `Url::to()`;
 - `options` - HTML options of the `a` tag;
-- `queryParams` - array of params added to `url`
+- `queryParams` - array of params added to `url`, `['id']` by default;
 - `render` - custom render js function. E.g:
 ```php
 //config ...

@@ -30,7 +30,7 @@ class LinkColumn extends \yii\base\BaseObject
         }
 
         if (!isset($this->render)) {
-            $this->render = new JsExpression('function render( data, type, row, meta ){
+            $this->render = new JsExpression('function render(data, type, row, meta){
             var p = ' . Json::encode($this->queryParams) . ';
             var q = {};for (var i = 0; i < p.length; i++) {q[p[i]] = row[p[i]];}
             var link = jQuery(\'' . Html::a($this->label, $this->url, $this->options) . '\');

@@ -18,8 +18,4 @@ class DataTableDefaultAsset extends AssetBundle
         DataTableBaseAsset::class,
     ];
 
-    public function init()
-    {
-    }
-
 } 

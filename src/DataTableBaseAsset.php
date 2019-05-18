@@ -28,7 +28,7 @@ class DataTableBaseAsset extends AssetBundle
     {
         parent::init();
         $this->js[] = 'js/jquery.dataTables' . (YII_ENV_DEV ? '' : '.min') . '.js';
-	    $this->css[] = 'css/jquery.dataTables' . (YII_ENV_DEV ? '' : '.min') . '.css';
+        $this->css[] = 'css/jquery.dataTables' . (YII_ENV_DEV ? '' : '.min') . '.css';
 
         if ($this->fontAwesome) {
             $this->css[] = 'dataTables.fontAwesome.css';
