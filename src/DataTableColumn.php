@@ -7,6 +7,7 @@
 
 namespace nullref\datatable;
 
+use yii\base\InvalidConfigException;
 use yii\base\Widget;
 use yii\helpers\Html;
 use yii\helpers\Inflector;
@@ -64,8 +65,8 @@ class DataTableColumn extends Widget
     {
         parent::init();
 
-        if ($this->data === null) {
-            throw new InvalidConfigException(get_class($this) . '::$data must be set.');
+        if ($this->data === null && $this->render === null) {
+            throw new InvalidConfigException("Either 'data' or 'render' properties must be specified.");
         }
 
         if ($this->title === null) {

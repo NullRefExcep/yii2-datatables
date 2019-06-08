@@ -13,7 +13,6 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Inflector;
 use yii\helpers\Json;
-use yii\web\JsExpression;
 
 /**
  * Class DataTable
@@ -149,16 +148,18 @@ class DataTable extends Widget
                 $row = [];
                 foreach ($this->_options['columns'] as $column) {
                     if ($column instanceof DataTableColumn) {
-                        $value = ArrayHelper::getValue($obj, $column->data);
-                        if (($pos = strrpos($column->data, '.')) !== false) {
-                            $keys = explode('.', $column->data);
-                            $a = $value;
-                            foreach (array_reverse($keys) as $key) {
-                                $a = [$key => $a];
+                        if ($column->data) {
+                            $value = ArrayHelper::getValue($obj, $column->data);
+                            if (($pos = strrpos($column->data, '.')) !== false) {
+                                $keys = explode('.', $column->data);
+                                $a = $value;
+                                foreach (array_reverse($keys) as $key) {
+                                    $a = [$key => $a];
+                                }
+                                $row[$keys[0]] = $a[$keys[0]];
+                            } else {
+                                $row[$column->data] = $value;
                             }
-                            $row[$keys[0]] = $a[$keys[0]];
-                        } else {
-                            $row[$column->data] = $value;
                         }
                     }
                 }
