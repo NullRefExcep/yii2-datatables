@@ -107,7 +107,7 @@ You should pass fields that are using at render function to `queryParams` proper
 
 ## Column filtering
 
-You ca add column filtering functionality by setting option `withColumnFilter` to `true` :
+You can add column filtering functionality by setting option `withColumnFilter` to `true` :
 
 - By default it generates a text field as filter input. 
 - It can be replaced by a combo box using `filter` parameter when defining column. It should be a associative array 
