@@ -214,18 +214,17 @@ It's possible to use custom styles and scripts:
 To enable server-side processing add `DataTableAction` to controller like this:
 
 ```php
- class SomeController extends Controller
- {
-     public function actions()
-     {
-         return [
-             'datatables' => [
-                 'class' => 'nullref\datatable\DataTableAction',
-                 'query' => Model::find(),
-             ],
-         ];
-     }
-     
+class SomeController extends Controller
+{
+    public function actions()
+    {
+        return [
+            'datatables' => [
+                'class' => 'nullref\datatable\DataTableAction',
+                'query' => Model::find(),
+            ],
+        ];
+    }
 }
 ```
 
@@ -260,7 +259,6 @@ public function actions()
          ],
     ];
 }
-
 ```
 
 If you need to get some relation data you can call `join` or similar methods from `$query` in `applyFilter` closure.
@@ -268,9 +266,54 @@ If you need to get some relation data you can call `join` or similar methods fro
 And add options to widget: 
 
 ```php
-    <?= \nullref\datatable\DataTable::widget([
-        /** ... */
-        'serverSide' => true,
-        'ajax' => '/site/datatables',
-    ]) ?>
+<?= \nullref\datatable\DataTable::widget([
+    /** ... */
+    'serverSide' => true,
+    'ajax' => '/site/datatables',
+]) ?>
+```
+
+
+## Extra columns
+
+If need to use some custom fields from your model at your render function at column you could pass `extraColumns` param.
+
+It available at DataTable widget, column and server side action definition:
+
+```php
+<?= \nullref\datatable\DataTable::widget([
+    /** ... */
+    'data' => $dataProvider->getModels(),
+    'extraColumns' => ['customPrice'],
+    'columns' => [
+        [
+            'title' => 'Custom column',
+            'extraColumns' => ['customField'],
+            'render' => new JsExpression($customColumnRender),
+        ],
+    ],
+]) ?>
+```
+
+```php
+class SomeController extends Controller
+{
+    public function actions()
+    {
+        return [
+            'datatables' => [
+                'class' => 'nullref\datatable\DataTableAction',
+                'query' => Model::find(),
+                'extraColumns' => ['customPrice'],
+            ],
+        ];
+    }
+}
+```
+
+```php
+<?= \nullref\datatable\DataTable::widget([
+    /** ... */
+    'extraColumns' => ['customPrice'],
+]) ?>
 ```

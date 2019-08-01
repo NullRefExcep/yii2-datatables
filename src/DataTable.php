@@ -88,15 +88,23 @@ class DataTable extends Widget
     const PAGING_FULL = 'full';
     const PAGING_FULL_NUMBERS = 'full_numbers';
     public $id;
+
     /**
      * @var array Html options for table
      */
     public $tableOptions = [];
+
+    /**
+     * @var array
+     */
+    public $extraColumns = [];
+
     public $withColumnFilter;
     /** @var bool */
     public $globalVariable = false;
     protected $_options = [];
-    protected $_hiddenColumns = [];
+
+    protected $_extraColumns = [];
 
     public function init()
     {
@@ -108,6 +116,7 @@ class DataTable extends Widget
 
     protected function initColumns()
     {
+        $this->_extraColumns = $this->extraColumns;
         if (isset($this->_options['columns'])) {
             foreach ($this->_options['columns'] as $key => $value) {
                 if (!is_array($value)) {
@@ -128,8 +137,8 @@ class DataTable extends Widget
                 }
                 if (isset($value['class'])) {
                     $column = \Yii::createObject($value);
-                    if ($column instanceof LinkColumn) {
-                        $this->_hiddenColumns = array_merge($this->_hiddenColumns, $column->queryParams);
+                    if ($column instanceof DataTableColumn) {
+                        $this->_extraColumns = array_merge($this->_extraColumns, $column->getExtraColumns());
                     }
                     $this->_options['columns'][$key] = $column;
                 }
@@ -140,7 +149,7 @@ class DataTable extends Widget
 
     private function initData()
     {
-        $this->_hiddenColumns = array_unique($this->_hiddenColumns);
+        $this->_extraColumns = array_unique($this->_extraColumns);
         if (array_key_exists('data', $this->_options)) {
             $data = [];
 
@@ -163,7 +172,7 @@ class DataTable extends Widget
                         }
                     }
                 }
-                foreach ($this->_hiddenColumns as $column) {
+                foreach ($this->_extraColumns as $column) {
                     $row[$column] = ArrayHelper::getValue($obj, $column);
                 }
                 if ($row) {

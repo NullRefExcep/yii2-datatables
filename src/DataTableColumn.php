@@ -47,6 +47,16 @@ class DataTableColumn extends Widget
     /** @var string CSS class for column cell */
     public $sClass = '';
 
+    public $className = '';
+
+    /**
+     * Add extra fields to dataset
+     * These fields could be used at render function
+     *
+     * @var array
+     */
+    public $extraColumns = [];
+
     /**
      * @var array|null|false Indicating if a filter will be displayed or not.
      *
@@ -56,7 +66,7 @@ class DataTableColumn extends Widget
      *   the list options.
      * - If you don't want a filter for this data column, set this value to be false.
      */
-    private $filter;
+    protected $filter;
 
     /**
      * Check if all required properties is set
@@ -177,6 +187,14 @@ class DataTableColumn extends Widget
     public function setFilter($filter)
     {
         $this->filter = $filter;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExtraColumns()
+    {
+        return $this->extraColumns;
     }
 
 }

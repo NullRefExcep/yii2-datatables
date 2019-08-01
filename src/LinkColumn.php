@@ -20,6 +20,8 @@ class LinkColumn extends DataTableColumn
     public $searchable = false;
     public $orderable = false;
 
+    protected $filter = false;
+
     public function init()
     {
         if (empty($this->linkOptions['id'])) {
@@ -35,5 +37,15 @@ class LinkColumn extends DataTableColumn
             link.attr("id", link.attr("id") + meta.row);link.attr("href", link.attr("href") + paramPrefix + jQuery.param(q));
             return link.get()[0].outerHTML;}');
         }
+
+        parent::init();
+    }
+
+    /**
+     * @return array
+     */
+    public function getExtraColumns()
+    {
+        return array_unique(array_merge(parent::getExtraColumns(), $this->queryParams));
     }
 }

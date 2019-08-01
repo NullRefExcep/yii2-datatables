@@ -74,6 +74,14 @@ class DataTableAction extends Action
     public $formatResponse;
 
     /**
+     * Add extra fields to dataset
+     * These fields could be used at render function
+     *
+     * @var array
+     */
+    public $extraColumns = [];
+
+    /**
      * Check if query is configured
      * @throws InvalidConfigException
      */
@@ -135,11 +143,12 @@ class DataTableAction extends Action
         $dataProvider = new ActiveDataProvider(['query' => $filterQuery, 'pagination' => ['pageSize' => Yii::$app->request->getQueryParam('length', 10)]]);
         Yii::$app->response->format = Response::FORMAT_JSON;
         try {
+            $allColumns = array_merge($columns, $this->getExtraColumns());
             $response = [
                 'draw' => (int)$draw,
                 'recordsTotal' => (int)$originalQuery->count(),
                 'recordsFiltered' => (int)$dataProvider->getTotalCount(),
-                'data' => $this->formatData($filterQuery, $columns),
+                'data' => $this->formatData($filterQuery, $allColumns),
             ];
         } catch (\Exception $e) {
             return ['error' => $e->getMessage()];
@@ -206,6 +215,16 @@ class DataTableAction extends Action
             $query->addOrderBy([$columns[$item['column']]['data'] => $sort]);
         }
         return $query;
+    }
+
+    /**
+     * Prepare extraColumns for
+     */
+    protected function getExtraColumns()
+    {
+        return array_map(function ($column) {
+            return ['data' => $column];
+        }, $this->extraColumns);
     }
 
     /**
