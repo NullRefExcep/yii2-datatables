@@ -196,7 +196,7 @@ class DataTable extends Widget
 
             $this->getView()->registerJs(
                 <<<JS
-{
+(function() {
     var params = ${encodedParams};
     var table;
     ${globalVariable} table = jQuery("#${id}").DataTable(params);
@@ -227,7 +227,7 @@ class DataTable extends Widget
             }
         } );
     } );
-}
+})();
 JS
             );
         } else {
