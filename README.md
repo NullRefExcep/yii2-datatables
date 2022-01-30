@@ -64,6 +64,15 @@ To pass them as widget options:
     ]) ?>
 ```
 
+## Specifies datatable id
+
+```php
+<?= \nullref\datatable\DataTable::widget([
+    'data' => $dataProvider->getModels(),
+    'id' => 'your-datatable-id'
+]) ?>
+```
+
 ## Add Links to row
 
 ```php
