@@ -12,9 +12,6 @@ use yii\web\AssetBundle;
 
 class DataTableBootstrapAsset extends AssetBundle
 {
-    # public $sourcePath = '@bower/datatables-plugins/integration/bootstrap/3';
-    public $sourcePath = '@bower/datatables.net-bs4';
-
     public $depends = [
         DataTableBaseAsset::class,
     ];
@@ -23,10 +20,24 @@ class DataTableBootstrapAsset extends AssetBundle
     {
         parent::init();
 
-        #$this->depends[] = 'yii\bootstrap\BootstrapAsset';
-        $this->css[] = 'dataTables.bootstrap.css';
-        $this->js[] = 'dataTables.bootstrap' . (YII_ENV_DEV ? '' : '.min') . '.js';
-        $this->depends[] = 'yii\bootstrap4\BootstrapAsset';
+        if (class_exists('yii\bootstrap\BootstrapAsset')) {
+            $this->sourcePath = '@bower/datatables-plugins/integration/bootstrap/3';
+            $this->depends[] = 'yii\bootstrap\BootstrapAsset';
+            $this->css[] = 'dataTables.bootstrap.css';
+            $this->js[] = 'dataTables.bootstrap' . (YII_ENV_DEV ? '' : '.min') . '.js';
+
+        } else if(class_exists('yii\bootstrap4\BootstrapAsset')) {
+            $this->sourcePath = '@bower/datatables.net-bs4';
+            $this->depends[] = 'yii\bootstrap4\BootstrapAsset';
+            $this->css[] = 'css\dataTables.bootstrap4.css';
+            $this->js[] = 'js\dataTables.bootstrap4' . (YII_ENV_DEV ? '' : '.min') . '.js';
+
+        } else {
+            $this->sourcePath = '@bower/datatables.net-bs5';
+            $this->depends[] = 'yii\bootstrap5\BootstrapAsset';
+            $this->css[] = 'css\dataTables.bootstrap5.css';
+            $this->js[] = 'js\dataTables.bootstrap5' . (YII_ENV_DEV ? '' : '.min') . '.js';
+        }
     }
 
 } 
