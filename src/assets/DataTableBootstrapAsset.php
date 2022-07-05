@@ -22,9 +22,10 @@ class DataTableBootstrapAsset extends AssetBundle
     {
         parent::init();
 
-        $this->depends[] = 'yii\bootstrap\BootstrapAsset';
+        #$this->depends[] = 'yii\bootstrap\BootstrapAsset';
         $this->css[] = 'dataTables.bootstrap.css';
         $this->js[] = 'dataTables.bootstrap' . (YII_ENV_DEV ? '' : '.min') . '.js';
+        $this->depends[] = 'yii\bootstrap4\BootstrapAsset';
     }
 
 } 
