@@ -12,7 +12,8 @@ use yii\web\AssetBundle;
 
 class DataTableBootstrapAsset extends AssetBundle
 {
-    public $sourcePath = '@bower/datatables-plugins/integration/bootstrap/3';
+    # public $sourcePath = '@bower/datatables-plugins/integration/bootstrap/3';
+    public $sourcePath = '@bower/datatables.net-bs4';
 
     public $depends = [
         DataTableBaseAsset::class,
