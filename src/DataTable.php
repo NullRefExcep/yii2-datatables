@@ -118,12 +118,15 @@ class DataTable extends Widget
     {
         $this->_extraColumns = $this->extraColumns;
         if (isset($this->_options['columns'])) {
+          $demoObject = (count($this->_options['data'])) ? $this->_options['data'][0] : null;
             foreach ($this->_options['columns'] as $key => $value) {
                 if (!is_array($value)) {
                     $value = [
                         'class' => DataTableColumn::class,
                         'attribute' => $value,
-                        'label' => Inflector::camel2words($value)
+                        'label' => $demoObject instanceof \yii\base\Model
+                             ? $demoObject->getAttributeLabel($value)
+                             : Inflector::camel2words($value)
                     ];
                 }
                 if (isset($value['type'])) {
