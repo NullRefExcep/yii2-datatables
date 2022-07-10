@@ -29,7 +29,8 @@
         "php": ">=5.5.0",
         "yiisoft/yii2": "~2.0.13",
         "bower-asset/datatables": "~1.10.15",
-        "bower-asset/datatables.net-bs4": "~1.10.15"
+        "bower-asset/datatables.net-bs4": "~1.10.15",
+        "npm-asset/datatables.net-bs5": "~1.10.15"
     },
     "autoload": {
         "psr-4": {

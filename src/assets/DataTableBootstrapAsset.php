@@ -33,7 +33,7 @@ class DataTableBootstrapAsset extends AssetBundle
             $this->js[] = 'js\dataTables.bootstrap4' . (YII_ENV_DEV ? '' : '.min') . '.js';
 
         } else {
-            $this->sourcePath = '@bower/datatables.net-bs5';
+            $this->sourcePath = '@npm/datatables.net-bs5';
             $this->depends[] = 'yii\bootstrap5\BootstrapAsset';
             $this->css[] = 'css\dataTables.bootstrap5.css';
             $this->js[] = 'js\dataTables.bootstrap5' . (YII_ENV_DEV ? '' : '.min') . '.js';
