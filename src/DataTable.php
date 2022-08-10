@@ -8,7 +8,11 @@
 namespace nullref\datatable;
 
 use nullref\datatable\assets\DataTableAsset;
+use yii\base\Model;
 use yii\base\Widget;
+use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
+use yii\db\ActiveQueryInterface;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Inflector;
@@ -104,21 +108,36 @@ class DataTable extends Widget
     public $globalVariable = false;
     protected $_options = [];
 
+    /**
+     * @var \yii\data\DataProviderInterface the data provider for the view.
+     */
+    protected $_dataProvider;
+
     protected $_extraColumns = [];
 
+    /**
+     * @throws \yii\base\InvalidConfigException
+     * @throws \Exception if ArrayHelper::getValue()
+     */
     public function init()
     {
         parent::init();
+        if ($this->data === null) {
+            $this->data = is_null($this->_dataProvider) ? [] : $this->_dataProvider->getModels();
+        }
         DataTableAsset::register($this->getView());
         $this->initColumns();
         $this->initData();
     }
 
+    /**
+     * @throws \yii\base\InvalidConfigException
+     */
     protected function initColumns()
     {
         $this->_extraColumns = $this->extraColumns;
         if (isset($this->_options['columns'])) {
-          $demoObject = (count($this->_options['data'])) ? $this->_options['data'][0] : null;
+            $demoObject = $this->getModel();
             foreach ($this->_options['columns'] as $key => $value) {
                 if (!is_array($value)) {
                     $value = [
@@ -150,6 +169,35 @@ class DataTable extends Widget
 
     }
 
+    /**
+     * Detect a model class from `dataProvider` or `data` attributes
+     *
+     * @see \yii\grid\DataColumn::getHeaderCellLabel()
+     *
+     * return Model|null    NULL is returned when only property $data is defined, and is either empty or first entry is not of type model
+     */
+    protected function getModel()
+    {
+        $provider = $this->_dataProvider;
+        if ($provider instanceof ActiveDataProvider && $provider->query instanceof ActiveQueryInterface) {
+            /* @var $modelClass Model */
+            $modelClass = $provider->query->modelClass;
+            $model = $modelClass::instance();
+        } elseif ($provider instanceof ArrayDataProvider && $provider->modelClass !== null) {
+            /* @var $modelClass Model */
+            $modelClass = $provider->modelClass;
+            $model = $modelClass::instance();
+        } else {
+            $models = $this->data;
+            //$model = (count($models)) ? $models[0] : null;
+            $model = reset($models);
+        }
+        return $model instanceof Model ? $model : null;
+    }
+
+    /**
+     * @throws \Exception if ArrayHelper::getValue() throws
+     */
     private function initData()
     {
         $this->_extraColumns = array_unique($this->_extraColumns);
@@ -245,11 +293,17 @@ JS
 
     public function __get($name)
     {
+        if ($name == 'dataProvider') {
+            return $this->_dataProvider;
+        }
         return isset($this->_options[$name]) ? $this->_options[$name] : null;
     }
 
     public function __set($name, $value)
     {
+        if ($name == 'dataProvider') {
+            return $this->_dataProvider = $value;
+        }
         return $this->_options[$name] = $value;
     }
 

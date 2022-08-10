@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## next release
+### Added
+- Support for bootstrap 4 (autodetect required bootstrap version)
+- Add `dataProvider` property to `DataTable`
+  - if set, property `data` is auto filled with models from dataProvider
+  - if models are found either in `dataProvider` or in `data`, column labels are loaded from
+    `Model::attributes()`
+
 ## v1.1.1
 ### Added
 - Add `extraColumns` property to `DataTable`, `DataTableColumn`, `DataTableAction`

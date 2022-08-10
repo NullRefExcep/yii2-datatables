@@ -22,6 +22,18 @@ to the require section of your `composer.json` file.
 
 ```php
 <?= \nullref\datatable\DataTable::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => [
+        'id',
+        'name',
+        'email'
+    ],
+]) ?>
+```
+
+For backwards compatibility the old usage via `data` is still supported
+```php
+<?= \nullref\datatable\DataTable::widget([
     'data' => $dataProvider->getModels(),
     'columns' => [
         'id',
@@ -30,6 +42,8 @@ to the require section of your `composer.json` file.
     ],
 ]) ?>
 ```
+
+
 
 ## DataTable options
 Also you can use all [Datatables options](https://datatables.net/reference/option/)
