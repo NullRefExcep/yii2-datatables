@@ -9,6 +9,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   - if set, property `data` is auto filled with models from dataProvider
   - if models are found either in `dataProvider` or in `data`, column labels are loaded from
     `Model::attributes()`
+- restore support for custom column definitions (#52)
 
 ## v1.1.1
 ### Added
