@@ -79,7 +79,7 @@ class DataTableColumn extends Widget
             throw new InvalidConfigException("Either 'data' or 'render' properties must be specified.");
         }
 
-        if ($this->title === null) {
+        if ($this->title === null && !is_null($this->attribute)) {
             $this->title = Inflector::camel2words($this->attribute);
         }
 
