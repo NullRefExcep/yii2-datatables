@@ -2,13 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## next release
+## v1.1.2
 ### Added
-- Support for bootstrap 4 (autodetect required bootstrap version)
+- Support for bootstrap 4/5 (autodetect required bootstrap version)
 - Add `dataProvider` property to `DataTable`
-  - if set, property `data` is auto filled with models from dataProvider
+  - if set, property `data` is autofilled with models from dataProvider
   - if models are found either in `dataProvider` or in `data`, column labels are loaded from
     `Model::attributes()`
+- restore support for custom column definitions ([#52])
 
 ## v1.1.1
 ### Added
@@ -44,3 +45,5 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## v1.0.0
 ### Changed 
 - Move DataTable options to protected array. Add __set and __get methods.
+
+[#52]: https://github.com/NullRefExcep/yii2-datatables/issues/52

@@ -22,6 +22,12 @@
         {
             "name": "Dmytro Karpovych",
             "email": "ZAYEC77@gmail.com"
+        },
+        {
+            "name": "Radon8472",
+            "email": "develop@radon-software.net",
+            "homepage": "https://github.com/Radon8472",
+            "role": "Contributor"
         }
     ],
     "minimum-stability": "stable",
