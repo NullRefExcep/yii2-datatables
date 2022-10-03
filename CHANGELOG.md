@@ -10,6 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   - if models are found either in `dataProvider` or in `data`, column labels are loaded from
     `Model::attributes()`
 - restore support for custom column definitions ([#52])
+- `DataTableAction` `query` parameter can be `Closure`
 
 ## v1.1.1
 ### Added
