@@ -8,6 +8,7 @@
 namespace nullref\datatable;
 
 
+use Closure;
 use Yii;
 use yii\base\Action;
 use yii\base\InvalidConfigException;
@@ -37,7 +38,7 @@ class DataTableAction extends Action
     public $requestMethod = self::REQUEST_METHOD_GET;
 
     /**
-     * @var ActiveQuery
+     * @var ActiveQuery|Closure
      */
     public $query;
 
@@ -89,6 +90,10 @@ class DataTableAction extends Action
     {
         if ($this->query === null) {
             throw new InvalidConfigException(get_class($this) . '::$query must be set.');
+        }
+
+        if ($this->query instanceof Closure) {
+            $this->query = call_user_func($this->query);
         }
 
         if ($this->formatData === null) {
@@ -249,4 +254,4 @@ class DataTableAction extends Action
 
         return $response;
     }
-} 
+}

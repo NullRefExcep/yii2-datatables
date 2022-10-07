@@ -286,6 +286,17 @@ public function actions()
 
 If you need to get some relation data you can call `join` or similar methods from `$query` in `applyFilter` closure.
 
+You may also specify a closure for `query` in `DataTableAction` config if you need complex query like in the following code:
+```php
+/** ... */
+'query' => function() {
+    $calculatedValue = calculate_value_for_query();
+    
+    return Model::find()->where(['calculated_value' => $calculatedValue]);
+},
+/** ... */
+```
+
 And add options to widget: 
 
 ```php

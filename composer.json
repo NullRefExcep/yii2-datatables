@@ -28,6 +28,12 @@
             "email": "develop@radon-software.net",
             "homepage": "https://github.com/Radon8472",
             "role": "Contributor"
+        },
+        {
+            "name": "Oleksandr Lynnyk",
+            "email": "alexandr.linnik@gmail.com",
+            "homepage": "https://github.com/alxlnk",
+            "role": "Contributor"
         }
     ],
     "minimum-stability": "stable",
