@@ -18,4 +18,11 @@ class DataTableDefaultAsset extends AssetBundle
         DataTableBaseAsset::class,
     ];
 
+    public function init()
+    {
+        parent::init();
+
+        $this->js[] = 'js/dataTables.dataTables' . (YII_ENV_DEV ? '' : '.min') . '.js';
+        $this->css[] = 'css/dataTables.dataTables' . (YII_ENV_DEV ? '' : '.min') . '.css';
+    }
 } 
