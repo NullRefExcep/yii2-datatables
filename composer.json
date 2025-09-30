@@ -38,23 +38,19 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">=5.5.0",
-        "yiisoft/yii2": "~2.0.13",
-        "bower-asset/datatables": "~1.10.15",
-        "bower-asset/datatables-plugins": "~1.10.15",
-        "bower-asset/datatables.net-bs4": "~1.10.15",
-        "npm-asset/datatables.net-bs5": "~1.10.15"
+        "php": ">=7.4.0",
+        "yiisoft/yii2": "~2.0.50",
+        "npm-asset/datatables.net": "^2.0",
+        "npm-asset/datatables.net-dt": "^2.0",
+        "npm-asset/datatables.net-jqui": "^2.0",
+        "npm-asset/datatables.net-bs": "^2.0",
+        "npm-asset/datatables.net-bs4": "^2.0",
+        "npm-asset/datatables.net-bs5": "^2.0",
+        "npm-asset/datatables.net-plugins": "^2.0"
     },
     "autoload": {
         "psr-4": {
             "nullref\\datatable\\": "src/"
-        }
-    },
-    "config": {
-        "fxp-asset": {
-            "installer-paths": {
-                "bower-asset-library": "vendor/bower"
-            }
         }
     }
 }

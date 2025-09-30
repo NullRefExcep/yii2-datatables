@@ -12,6 +12,8 @@ use yii\web\AssetBundle;
 
 class DataTableFaAsset extends AssetBundle
 {
+    public $sourcePath = '@npm/datatables.net';
+    
     public $css = [
         'dataTables.fontAwesome.css',
     ];

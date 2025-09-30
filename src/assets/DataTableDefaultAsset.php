@@ -12,10 +12,16 @@ use yii\web\AssetBundle;
 
 class DataTableDefaultAsset extends AssetBundle
 {
-    public $sourcePath = '@bower/datatables/media/css';
+    public $sourcePath = '@npm/datatables.net-dt';
 
     public $depends = [
         DataTableBaseAsset::class,
     ];
 
+    public function init()
+    {
+        parent::init();
+
+        $this->css[] = 'css/dataTables.dataTables' . (YII_ENV_DEV ? '' : '.min') . '.css';
+    }
 } 

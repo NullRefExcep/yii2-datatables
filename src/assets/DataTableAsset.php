@@ -35,9 +35,10 @@ class DataTableAsset extends AssetBundle
                 $this->depends[] = DataTableBootstrapAsset::class;
                 break;
             case self::STYLING_DEFAULT:
+            default:
                 $this->depends[] = DataTableBaseAsset::class;
+                $this->depends[] = DataTableDefaultAsset::class;
                 break;
-            default;
         }
 
         if ($this->fontAwesome) {
