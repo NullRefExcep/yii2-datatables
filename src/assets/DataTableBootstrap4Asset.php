@@ -13,6 +13,7 @@ use yii\web\AssetBundle;
 class DataTableBootstrap4Asset extends AssetBundle
 {
     public $depends = [
+        'yii\bootstrap4\BootstrapAsset',
         DataTableBaseAsset::class,
     ];
 
@@ -21,7 +22,6 @@ class DataTableBootstrap4Asset extends AssetBundle
         parent::init();
 
         $this->sourcePath = '@npm/datatables.net-bs4';
-        $this->depends[] = 'yii\bootstrap4\BootstrapAsset';
         $this->css[] = 'css/dataTables.bootstrap4.min' . (YII_ENV_DEV ? '' : '.min') . '.css';
         $this->js[] = 'js/dataTables.bootstrap4.min' . (YII_ENV_DEV ? '' : '.min') . '.js';
     }

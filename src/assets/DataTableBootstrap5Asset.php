@@ -13,8 +13,8 @@ use yii\web\AssetBundle;
 class DataTableBootstrap5Asset extends AssetBundle
 {
     public $depends = [
-        DataTableBaseAsset::class,
         'yii\bootstrap5\BootstrapAsset',
+        DataTableBaseAsset::class,
     ];
 
     public function init()
