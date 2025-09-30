@@ -23,8 +23,8 @@ class DataTableBootstrapAsset extends AssetBundle
         if (class_exists('yii\bootstrap\BootstrapAsset')) {
             $this->sourcePath = '@npm/datatables.net-bs';
             $this->depends[] = 'yii\bootstrap\BootstrapAsset';
-            $this->css[] = 'css/dataTables.bootstrap.min' . (YII_ENV_DEV ? '' : '.min') . '.css';
-            $this->js[] = 'js/dataTables.bootstrap.min' . (YII_ENV_DEV ? '' : '.min') . '.js';
+            $this->css[] = 'css/dataTables.bootstrap' . (YII_ENV_DEV ? '' : '.min') . '.css';
+            $this->js[] = 'js/dataTables.bootstrap' . (YII_ENV_DEV ? '' : '.min') . '.js';
         } else if(class_exists('yii\bootstrap4\BootstrapAsset')) {
             $this->sourcePath = '@npm/datatables.net-bs4';
             $this->depends[] = 'yii\bootstrap4\BootstrapAsset';
