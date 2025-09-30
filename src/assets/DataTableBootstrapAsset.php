@@ -22,8 +22,8 @@ class DataTableBootstrapAsset extends AssetBundle
         parent::init();
 
         $this->sourcePath = '@npm/datatables.net-bs';
-        $this->css[] = 'css/dataTables.bootstrap.min' . (YII_ENV_DEV ? '' : '.min') . '.css';
-        $this->js[] = 'js/dataTables.bootstrap.min' . (YII_ENV_DEV ? '' : '.min') . '.js';
+        $this->css[] = 'css/dataTables.bootstrap' . (YII_ENV_DEV ? '' : '.min') . '.css';
+        $this->js[] = 'js/dataTables.bootstrap' . (YII_ENV_DEV ? '' : '.min') . '.js';
     }
 
 } 

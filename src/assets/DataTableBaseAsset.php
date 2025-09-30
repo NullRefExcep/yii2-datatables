@@ -20,7 +20,7 @@ class DataTableBaseAsset extends AssetBundle
 
     public $styling = self::STYLING_DEFAULT;
     public $fontAwesome = false;
-    public $sourcePath = '@npm/datatables.net-dt';
+    public $sourcePath = '@npm/datatables.net';
 
     public $depends = [
         'yii\web\JqueryAsset',
@@ -29,8 +29,7 @@ class DataTableBaseAsset extends AssetBundle
     public function init()
     {
         parent::init();
-        $this->js[] = 'js/dataTables.dataTables' . (YII_ENV_DEV ? '' : '.min') . '.js';
-        $this->css[] = 'css/dataTables.dataTables' . (YII_ENV_DEV ? '' : '.min') . '.css';
+        $this->js[] = 'js/dataTables.min' . (YII_ENV_DEV ? '' : '.min') . '.js';
 
         if ($this->fontAwesome) {
             $this->css[] = 'dataTables.fontAwesome.css';
