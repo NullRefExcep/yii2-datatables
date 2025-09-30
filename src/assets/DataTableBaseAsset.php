@@ -18,7 +18,7 @@ class DataTableBaseAsset extends AssetBundle
 
     public $styling = self::STYLING_DEFAULT;
     public $fontAwesome = false;
-    public $sourcePath = '@bower/datatables/media';
+    public $sourcePath = '@npm/datatables.net/media';
 
     public $depends = [
         'yii\web\JqueryAsset',

@@ -12,7 +12,7 @@ use yii\web\AssetBundle;
 
 class DataTableJuiAsset extends AssetBundle
 {
-    public $sourcePath = '@bower/datatables-plugins/integration/jqueryui';
+    public $sourcePath = '@npm/datatables.net-plugins/integration/jqueryui';
 
     public $depends = [
         DataTableBaseAsset::class,
@@ -23,8 +23,8 @@ class DataTableJuiAsset extends AssetBundle
         parent::init();
 
         $this->depends[] = 'yii\jui\JuiAsset';
-        $this->css[] = 'datatables-plugins/integration/jqueryui/dataTables.jqueryui.css';
-        $this->js[] = 'datatables-plugins/integration/jqueryui/dataTables.jqueryui' . (YII_ENV_DEV ? '' : '.min') . '.js';
+        $this->css[] = 'datatables.net-plugins/integration/jqueryui/dataTables.jqueryui.css';
+        $this->js[] = 'datatables.net-plugins/integration/jqueryui/dataTables.jqueryui' . (YII_ENV_DEV ? '' : '.min') . '.js';
     }
 
 } 

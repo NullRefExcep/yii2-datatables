@@ -12,7 +12,7 @@ use yii\web\AssetBundle;
 
 class DataTableDefaultAsset extends AssetBundle
 {
-    public $sourcePath = '@bower/datatables/media/css';
+    public $sourcePath = '@npm/datatables.net/media/css';
 
     public $depends = [
         DataTableBaseAsset::class,

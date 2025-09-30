@@ -21,13 +21,13 @@ class DataTableBootstrapAsset extends AssetBundle
         parent::init();
 
         if (class_exists('yii\bootstrap\BootstrapAsset')) {
-            $this->sourcePath = '@bower/datatables-plugins/integration/bootstrap/3';
+            $this->sourcePath = '@npm/datatables.net-plugins/integration/bootstrap/3';
             $this->depends[] = 'yii\bootstrap\BootstrapAsset';
             $this->css[] = 'dataTables.bootstrap.css';
             $this->js[] = 'dataTables.bootstrap' . (YII_ENV_DEV ? '' : '.min') . '.js';
 
         } else if(class_exists('yii\bootstrap4\BootstrapAsset')) {
-            $this->sourcePath = '@bower/datatables.net-bs4';
+            $this->sourcePath = '@npm/datatables.net-bs4';
             $this->depends[] = 'yii\bootstrap4\BootstrapAsset';
             $this->css[] = 'css\dataTables.bootstrap4.css';
             $this->js[] = 'js\dataTables.bootstrap4' . (YII_ENV_DEV ? '' : '.min') . '.js';
