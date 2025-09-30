@@ -14,9 +14,17 @@ composer require nullref/yii2-datatables
 ```
 or add
 ```
-"nullref/yii2-datatables": "~1.0"
+"nullref/yii2-datatables": "~2.0"
 ```
 to the require section of your `composer.json` file.
+
+### ⚠️ Version 2.0 Requirements
+- **PHP**: >= 7.4.0
+- **Yii2**: >= 2.0.50
+- **DataTables**: v2.0 (automatically installed via NPM assets)
+
+### 📋 Upgrading from v1.x
+If you're upgrading from version 1.x, please see our [Migration Guide](MIGRATION.md) for detailed instructions.
 
 ## Basic Usage
 

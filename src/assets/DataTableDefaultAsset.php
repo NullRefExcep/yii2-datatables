@@ -22,8 +22,6 @@ class DataTableDefaultAsset extends AssetBundle
     {
         parent::init();
 
-        $this->sourcePath = '@npm/datatables.net-dt';
         $this->css[] = 'css/dataTables.dataTables' . (YII_ENV_DEV ? '' : '.min') . '.css';
-        $this->js[] = 'js/dataTables.dataTables' . (YII_ENV_DEV ? '' : '.min') . '.js';
     }
 } 
