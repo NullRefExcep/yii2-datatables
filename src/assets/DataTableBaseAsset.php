@@ -14,6 +14,8 @@ class DataTableBaseAsset extends AssetBundle
 {
     const STYLING_DEFAULT = 'default';
     const STYLING_BOOTSTRAP = 'bootstrap';
+    const STYLING_BOOTSTRAP4 = 'bootstrap4';
+    const STYLING_BOOTSTRAP5 = 'bootstrap5';
     const STYLING_JUI = 'jqueryui';
 
     public $styling = self::STYLING_DEFAULT;

@@ -23,8 +23,8 @@ class DataTableJuiAsset extends AssetBundle
         parent::init();
 
         $this->depends[] = 'yii\jui\JuiAsset';
-        $this->css[] = 'datatables.net-jqui/css/dataTables.jqueryui' . (YII_ENV_DEV ? '' : '.min') . '.css';
-        $this->js[] = 'datatables.net-jqui/js/dataTables.jqueryui' . (YII_ENV_DEV ? '' : '.min') . '.js';
+        $this->css[] = 'css/dataTables.jqueryui' . (YII_ENV_DEV ? '' : '.min') . '.css';
+        $this->js[] = 'js/dataTables.jqueryui' . (YII_ENV_DEV ? '' : '.min') . '.js';
     }
 
 } 
