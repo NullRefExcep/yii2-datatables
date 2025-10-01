@@ -248,11 +248,11 @@ class DataTable extends Widget
             $this->getView()->registerJs(
                 <<<JS
 (function() {
-    var params = ${encodedParams};
+    var params = {$encodedParams};
     var table;
-    ${globalVariable} table = jQuery("#${id}").DataTable(params);
+    {$globalVariable} table = jQuery("#{$id}").DataTable(params);
     var filterRow = jQuery('<tr></tr>');
-    jQuery('#${id} thead tr th').each(function(i) 
+    jQuery('#{$id} thead tr th').each(function(i) 
     {
         var cell = jQuery('<td></td>')
             .attr('colspan', jQuery(this).attr('colspan'))
@@ -266,8 +266,8 @@ class DataTable extends Widget
             cell.html(jQuery.isFunction(params.columns[i].renderFilter) ? params.columns[i].renderFilter(table) : params.columns[i].renderFilter);
         }
     });
-    jQuery('#${id} thead').append(filterRow);
-    jQuery('#${id} thead tr:eq(1) td').each( function (i) 
+    jQuery('#{$id} thead').append(filterRow);
+    jQuery('#{$id} thead tr:eq(1) td').each( function (i) 
     {
         jQuery(':input', this).on('keyup change', function () {
             if (table.column(i).search() !== jQuery(this).val()) {
